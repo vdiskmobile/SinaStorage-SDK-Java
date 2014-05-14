@@ -38,9 +38,6 @@ import com.sina.http.HttpRequest;
  */
 public abstract class SCSWebServiceClient {
 
-    private static final String AMAZON = "Amazon";
-    private static final String AWS = "AWS";
-
     /** The service endpoint to which this client will send requests. */
     protected URI endpoint;
 
@@ -58,14 +55,6 @@ public abstract class SCSWebServiceClient {
 
 //    /** AWS signer for authenticating requests. */
 //    private Signer signer;
-
-    /**
-     * The cached service abbreviation for this service, used for identifying
-     * service endpoints by region, identifying the necessary signer, etc.
-     * Thread safe so it's backward compatible.
-     */
-    private volatile String serviceName;
-
 
     /**
      * Constructs a new SCSWebServiceClient object using the specified

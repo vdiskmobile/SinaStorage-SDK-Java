@@ -124,7 +124,7 @@ public class VersionInfoUtils {
     private static void initializeUserAgent() {
         StringBuilder buffer = new StringBuilder(1024);
 
-        buffer.append("aws-sdk-");
+        buffer.append("scs-java-sdk-");
         buffer.append(VersionInfoUtils.getPlatform().toLowerCase());
         buffer.append("/");
 

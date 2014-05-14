@@ -44,7 +44,7 @@ public class Sample {
 	String accessKey = "accessKey";
 	String secretKey = "secretKey";
 	
-	AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+	AWSCredentials credentials = new BasicAWSCredentials("1001nht3m7", "9fc22bb7ef60f6e9290b1e424daf744f40e7574f");
 	SCS conn = new SCSClient(credentials);
 	
 	/* Service操作 */
@@ -189,7 +189,7 @@ public class Sample {
 	 * 获取object metadata
 	 */
 	public void getObjectMeta(){
-		ObjectMetadata objectMetadata = conn.getObjectMetadata("asdasdasdasd", "awsdas阿斯顿.txt");
+		ObjectMetadata objectMetadata = conn.getObjectMetadata("asdasdasdasd", "aaa111a.txt");
 		System.out.println(objectMetadata.getUserMetadata());
 		System.out.println(objectMetadata.getContentLength());
 		System.out.println(objectMetadata.getRawMetadata());
@@ -208,7 +208,7 @@ public class Sample {
 					put("ccc","3333");
 					put("asdfdsaf","vvvvvv");
 		}});
-		conn.setObjectMetadata("asdasdasdasd", "awsdas阿斯顿.txt", objectMetadata);
+		conn.setObjectMetadata("asdasdasdasd", "aaa111a.txt", objectMetadata);
 	}
 	
 	/**
@@ -369,7 +369,7 @@ public class Sample {
 
 		Sample sample = new Sample();
 		/* Service操作 */
-//		sample.getAllBuckets();
+		sample.getAllBuckets();
 		/* Bucket操作 */
 //		sample.createBucket();
 //		sample.deleteBucket();
@@ -391,11 +391,11 @@ public class Sample {
 //		sample.generateUrl();
 		
 		
-		try {
-			sample.multipartsUpload();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			sample.multipartsUpload();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		/* TransferManager */
 //		sample.putObjectByTransferManager();

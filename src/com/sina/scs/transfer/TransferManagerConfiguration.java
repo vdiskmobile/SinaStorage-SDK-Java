@@ -28,7 +28,7 @@ import static com.sina.scs.Constants.*;
 public class TransferManagerConfiguration {
     
     /** Default minimum part size for upload parts. */
-    private static final int DEFAULT_MINIMUM_UPLOAD_PART_SIZE = 5 * MB;
+    private static final int DEFAULT_MINIMUM_UPLOAD_PART_SIZE = 64 * MB;
     
     /** Default size threshold for when to use multipart uploads.  */
     private static final int DEFAULT_MULTIPART_UPLOAD_THRESHOLD = 64 * MB;//16 * MB;

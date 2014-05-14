@@ -112,7 +112,7 @@ public class Bucket {
 			}
 		}
 		//用量
-		this.setConsumedBytes((Long) bucketJsonMap.get("ConsumedBytes"));
+		this.setConsumedBytes((Integer) bucketJsonMap.get("ConsumedBytes"));
     	
     }
 
