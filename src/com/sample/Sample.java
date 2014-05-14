@@ -108,7 +108,7 @@ public class Sample {
 	 * 获取object metadata
 	 */
 	public void getObjectMetadata(){
-		ObjectMetadata metadata = conn.getObjectMetadata("test11", "/大哥放屁/大哥1.txt");
+		ObjectMetadata metadata = conn.getObjectMetadata("test11", "/aaa/bbb.txt");
 		System.out.println(metadata.getUserMetadata());
 		System.out.println(metadata.getETag());
 		System.out.println(metadata.getLastModified());
@@ -119,7 +119,7 @@ public class Sample {
 	 * 下载object 
 	 * more detail:http://docs.aws.amazon.com/AmazonS3/latest/dev/RetrievingObjectUsingJava.html
   	 *	//		断点续传
-	 *	//		GetObjectRequest rangeObjectRequest = new GetObjectRequest("test11", "/大哥放屁/大哥1.txt");
+	 *	//		GetObjectRequest rangeObjectRequest = new GetObjectRequest("test11", "/aaa/bbb.txt");
 	 *	//		rangeObjectRequest.setRange(0, 10); // retrieve 1st 10 bytes.
 	 *	//		S3Object objectPortion = conn.getObject(rangeObjectRequest);
 	 *	//		
@@ -128,7 +128,7 @@ public class Sample {
 	 *	//		objectData.close();
 	 */
 	public void getObject(){
-		S3Object s3Obj = conn.getObject("test11", "/大哥放屁/大哥1.txt");
+		S3Object s3Obj = conn.getObject("test11", "/aaa/bbb.txt");
 		InputStream in = s3Obj.getObjectContent();
 		byte[] buf = new byte[1024];
 		OutputStream out = null;
