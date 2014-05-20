@@ -44,7 +44,7 @@ public class Sample {
 	String accessKey = "accessKey";
 	String secretKey = "secretKey";
 	
-	AWSCredentials credentials = new BasicAWSCredentials("1001nht3m7", "9fc22bb7ef60f6e9290b1e424daf744f40e7574f");
+	AWSCredentials credentials = new BasicAWSCredentials(accessKey,secretKey);
 	SCS conn = new SCSClient(credentials);
 	
 	/* Service操作 */
@@ -369,13 +369,13 @@ public class Sample {
 
 		Sample sample = new Sample();
 		/* Service操作 */
-		sample.getAllBuckets();
+//		sample.getAllBuckets();
 		/* Bucket操作 */
 //		sample.createBucket();
 //		sample.deleteBucket();
 //		sample.getBucketAcl();
 //		sample.putBucketAcl();
-//		sample.listObjects();
+		sample.listObjects();
 		/* Object操作 */
 //		sample.getObjectMetadata();
 //		sample.getObject();
