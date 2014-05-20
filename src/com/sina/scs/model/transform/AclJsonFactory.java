@@ -3,10 +3,10 @@ package com.sina.scs.model.transform;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+import com.google.gson.Gson;
 import com.sina.SCSClientException;
 import com.sina.scs.model.AccessControlList;
 import com.sina.scs.model.Grant;
-import com.sina.util.json.Jackson;
 
 public class AclJsonFactory {
 
@@ -31,7 +31,8 @@ public class AclJsonFactory {
     		jsonMap.put(grant.getGrantee().getIdentifier(), grant.getPermissionsForJsonArray());
         }
     	
-    	String jsonString = Jackson.toJsonString(jsonMap);
+    	Gson gson = new Gson();
+    	String jsonString = gson.toJson(jsonMap);
     	
     	try {
 			return jsonString.getBytes("UTF-8");

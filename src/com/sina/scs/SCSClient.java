@@ -243,26 +243,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         init();
     }
 
-//    /**
-//     * Constructs a new Amazon S3 client using the specified AWS credentials,
-//     * client configuration and request metric collector to access Amazon S3.
-//     *
-//     * @param credentialsProvider
-//     *            The AWS credentials provider which will provide credentials
-//     *            to authenticate requests with AWS services.
-//     * @param clientConfiguration
-//     *            The client configuration options controlling how this client
-//     *            connects to Amazon S3 (e.g. proxy settings, retry counts, etc).
-//     * @param requestMetricCollector request metric collector
-//     */
-//    public SCSClient(AWSCredentialsProvider credentialsProvider,
-//            ClientConfiguration clientConfiguration,
-//            RequestMetricCollector requestMetricCollector) {
-//        super(clientConfiguration, requestMetricCollector);
-//        this.awsCredentialsProvider = credentialsProvider;
-//        init();
-//    }
-    
     protected final ExecutionContext createExecutionContext(SCSWebServiceRequest req) {
         return new ExecutionContext();
     }
@@ -318,14 +298,7 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         // Because of S3's virtual host style addressing, we need to change the
         // default, strict hostname verification to be more lenient.
 //        client.disableStrictHostnameVerification();
-
         setEndpoint(Constants.S3_HOSTNAME);
-
-//        HandlerChainFactory chainFactory = new HandlerChainFactory();
-//        requestHandler2s.addAll(chainFactory.newRequestHandlerChain(
-//                "/com/amazonaws/services/s3/request.handlers"));
-//        requestHandler2s.addAll(chainFactory.newRequestHandler2Chain(
-//                "/com/amazonaws/services/s3/request.handler2s"));
     }
 
     /**
@@ -528,15 +501,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
             new GenericBucketRequest(bucketName));
     }
 
-//    /**
-//     * Same as {@link #setBucketAcl(String, AccessControlList)}
-//     * but allows specifying a request metric collector.
-//     */
-//    public void setBucketAcl(String bucketName, AccessControlList acl) {
-//        setBucketAcl0(bucketName, acl);
-//    }
-
-
     @Override
     public void setBucketAcl(SetBucketAclRequest setBucketAclRequest)
             throws SCSClientException, SCSServiceException {
@@ -562,16 +526,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
 
         setAcl(bucketName, null, acl,new GenericBucketRequest(bucketName));
     }
-
-//    /**
-//     * Same as {@link #setBucketAcl(String, CannedAccessControlList)}
-//     * but allows specifying a request metric collector.
-//     */
-//    public void setBucketAcl(String bucketName, CannedAccessControlList acl) throws SCSClientException,
-//            SCSServiceException {
-//        setBucketAcl0(bucketName, acl, requestMetricCollector);
-//    }
-
 
     /* (non-Javadoc)
      * @see com.amazonaws.services.s3.AmazonS3#getObjectMetadata(java.lang.String, java.lang.String)
@@ -1170,197 +1124,7 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
 
         invoke(request, voidResponseHandler, destinationBucketName, destinationKey);
         
-//        CopyObjectResultHandler copyObjectResultHandler = null;
-//        try {
-//            @SuppressWarnings("unchecked")
-//            ResponseHeaderHandlerChain<CopyObjectResultHandler> handler = new ResponseHeaderHandlerChain<CopyObjectResultHandler>(
-//                    new Unmarshallers.CopyObjectUnmarshaller(),
-//                    new ServerSideEncryptionHeaderHandler<CopyObjectResultHandler>(), new S3VersionHeaderHandler(), new ObjectExpirationHeaderHandler<CopyObjectResultHandler>());
-//            copyObjectResultHandler = invoke(request, handler, destinationBucketName, destinationKey);
-//        } catch (AmazonS3Exception ase) {
-//            /*
-//             * If the request failed because one of the specified constraints
-//             * was not met (ex: matching ETag, modified since date, etc.), then
-//             * return null, so that users don't have to wrap their code in
-//             * try/catch blocks and check for this status code if they want to
-//             * use constraints.
-//             */
-//            if (ase.getStatusCode() == Constants.FAILED_PRECONDITION_STATUS_CODE) {
-//               return null;
-//            }
-//
-//            throw ase;
-//        }
-//
-//        /*
-//         * CopyObject has two failure modes:
-//         *  1 - An HTTP error code is returned and the error is processed like any
-//         *      other error response.
-//         *  2 - An HTTP 200 OK code is returned, but the response content contains
-//         *      an XML error response.
-//         *
-//         * This makes it very difficult for the client runtime to cleanly detect
-//         * this case and handle it like any other error response.  We could
-//         * extend the runtime to have a more flexible/customizable definition of
-//         * success/error (per request), but it's probably overkill for this
-//         * one special case.
-//         */
-//        if (copyObjectResultHandler.getErrorCode() != null) {
-//            String errorCode = copyObjectResultHandler.getErrorCode();
-//            String errorMessage = copyObjectResultHandler.getErrorMessage();
-//            String requestId = copyObjectResultHandler.getErrorRequestId();
-//            String hostId = copyObjectResultHandler.getErrorHostId();
-//
-//            AmazonS3Exception ase = new AmazonS3Exception(errorMessage);
-//            ase.setErrorCode(errorCode);
-//            ase.setErrorType(ErrorType.Service);
-//            ase.setRequestId(requestId);
-//            ase.setExtendedRequestId(hostId);
-//            ase.setServiceName(request.getServiceName());
-//            ase.setStatusCode(200);
-//
-//            throw ase;
-//        }
-//
-//        // TODO: Might be nice to create this in our custom S3VersionHeaderHandler
-//        CopyObjectResult copyObjectResult = new CopyObjectResult();
-//        copyObjectResult.setETag(copyObjectResultHandler.getETag());
-//        copyObjectResult.setLastModifiedDate(copyObjectResultHandler.getLastModified());
-//        copyObjectResult.setVersionId(copyObjectResultHandler.getVersionId());
-//        copyObjectResult.setServerSideEncryption(copyObjectResultHandler.getServerSideEncryption());
-//        copyObjectResult.setExpirationTime(copyObjectResultHandler.getExpirationTime());
-//        copyObjectResult.setExpirationTimeRuleId(copyObjectResultHandler.getExpirationTimeRuleId());
-//
-//        return copyObjectResult;
     }
-
-//    /**
-//     * Copies a source object to a part of a multipart upload.
-//     *
-//     * To copy an object, the caller's account must have read access to the source object and
-//     * write access to the destination bucket.
-//     * </p>
-//     * <p>
-//     * If constraints are specified in the <code>CopyPartRequest</code>
-//     * (e.g.
-//     * {@link CopyPartRequest#setMatchingETagConstraints(List)})
-//     * and are not satisfied when Amazon S3 receives the
-//     * request, this method returns <code>null</code>.
-//     * This method returns a non-null result under all other
-//     * circumstances.
-//     * </p>
-//     *
-//     * @param copyPartRequest
-//     *            The request object containing all the options for copying an
-//     *            Amazon S3 object.
-//     *
-//     * @return A {@link CopyPartResult} object containing the information
-//     *         returned by Amazon S3 about the newly created object, or <code>null</code> if
-//     *         constraints were specified that weren't met when Amazon S3 attempted
-//     *         to copy the object.
-//     *
-//     * @throws SCSClientException
-//     *             If any errors are encountered in the client while making the
-//     *             request or handling the response.
-//     * @throws SCSServiceException
-//     *             If any errors occurred in Amazon S3 while processing the
-//     *             request.
-//     *
-//     * @see AmazonS3#copyObject(CopyObjectRequest)
-//     * @see AmazonS3#initiateMultipartUpload(InitiateMultipartUploadRequest)
-//     */
-//    public CopyPartResult copyPart(CopyPartRequest copyPartRequest) {
-//        assertParameterNotNull(copyPartRequest.getSourceBucketName(),
-//                "The source bucket name must be specified when copying a part");
-//        assertParameterNotNull(copyPartRequest.getSourceKey(),
-//                "The source object key must be specified when copying a part");
-//        assertParameterNotNull(copyPartRequest.getDestinationBucketName(),
-//                "The destination bucket name must be specified when copying a part");
-//        assertParameterNotNull(copyPartRequest.getUploadId(),
-//                "The upload id must be specified when copying a part");
-//        assertParameterNotNull(copyPartRequest.getDestinationKey(),
-//                "The destination object key must be specified when copying a part");
-//        assertParameterNotNull(copyPartRequest.getPartNumber(),
-//                "The part number must be specified when copying a part");
-//
-//        String destinationKey = copyPartRequest.getDestinationKey();
-//        String destinationBucketName = copyPartRequest.getDestinationBucketName();
-//
-//        Request<CopyPartRequest> request = createRequest(destinationBucketName, destinationKey, copyPartRequest,
-//                HttpMethodName.PUT);
-//
-//        populateRequestWithCopyPartParameters(request, copyPartRequest);
-//
-//        request.addParameter("uploadId", copyPartRequest.getUploadId());
-//        request.addParameter("partNumber", Integer.toString(copyPartRequest.getPartNumber()));
-//
-//        /*
-//         * We can't send the Content-Length header if the user specified it,
-//         * otherwise it messes up the HTTP connection when the remote server
-//         * thinks there's more data to pull.
-//         */
-//        request.getHeaders().remove(Headers.CONTENT_LENGTH);
-//
-//        CopyObjectResultHandler copyObjectResultHandler = null;
-//        try {
-//            @SuppressWarnings("unchecked")
-//            ResponseHeaderHandlerChain<CopyObjectResultHandler> handler = new ResponseHeaderHandlerChain<CopyObjectResultHandler>(
-//                    new Unmarshallers.CopyObjectUnmarshaller(),
-//                    new ServerSideEncryptionHeaderHandler<CopyObjectResultHandler>(), new S3VersionHeaderHandler());
-//            copyObjectResultHandler = invoke(request, handler, destinationBucketName, destinationKey);
-//        } catch ( AmazonS3Exception ase ) {
-//            /*
-//             * If the request failed because one of the specified constraints
-//             * was not met (ex: matching ETag, modified since date, etc.), then
-//             * return null, so that users don't have to wrap their code in
-//             * try/catch blocks and check for this status code if they want to
-//             * use constraints.
-//             */
-//            if ( ase.getStatusCode() == Constants.FAILED_PRECONDITION_STATUS_CODE ) {
-//                return null;
-//            }
-//
-//            throw ase;
-//        }
-//
-//        /*
-//         * CopyPart has two failure modes: 1 - An HTTP error code is returned
-//         * and the error is processed like any other error response. 2 - An HTTP
-//         * 200 OK code is returned, but the response content contains an XML
-//         * error response.
-//         *
-//         * This makes it very difficult for the client runtime to cleanly detect
-//         * this case and handle it like any other error response. We could
-//         * extend the runtime to have a more flexible/customizable definition of
-//         * success/error (per request), but it's probably overkill for this one
-//         * special case.
-//         */
-//        if ( copyObjectResultHandler.getErrorCode() != null ) {
-//            String errorCode = copyObjectResultHandler.getErrorCode();
-//            String errorMessage = copyObjectResultHandler.getErrorMessage();
-//            String requestId = copyObjectResultHandler.getErrorRequestId();
-//            String hostId = copyObjectResultHandler.getErrorHostId();
-//
-//            AmazonS3Exception ase = new AmazonS3Exception(errorMessage);
-//            ase.setErrorCode(errorCode);
-//            ase.setErrorType(ErrorType.Service);
-//            ase.setRequestId(requestId);
-//            ase.setExtendedRequestId(hostId);
-//            ase.setServiceName(request.getServiceName());
-//            ase.setStatusCode(200);
-//
-//            throw ase;
-//        }
-//
-//        CopyPartResult copyPartResult = new CopyPartResult();
-//        copyPartResult.setETag(copyObjectResultHandler.getETag());
-//        copyPartResult.setPartNumber(copyPartRequest.getPartNumber());
-//        copyPartResult.setLastModifiedDate(copyObjectResultHandler.getLastModified());
-//        copyPartResult.setVersionId(copyObjectResultHandler.getVersionId());
-//        copyPartResult.setServerSideEncryption(copyObjectResultHandler.getServerSideEncryption());
-//
-//        return copyPartResult;
-//    }
 
     /* (non-Javadoc)
      * @see com.amazonaws.services.s3.AmazonS3#deleteObject(java.lang.String, java.lang.String)
@@ -1384,41 +1148,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         Request<DeleteObjectRequest> request = createRequest(deleteObjectRequest.getBucketName(), deleteObjectRequest.getKey(), deleteObjectRequest, HttpMethodName.DELETE);
         invoke(request, voidResponseHandler, deleteObjectRequest.getBucketName(), deleteObjectRequest.getKey());
     }
-
-//    /* (non-Javadoc)
-//     * @see com.amazonaws.services.s3.AmazonS3#deleteObjects(com.amazonaws.services.s3.model.DeleteObjectsRequest)
-//     */
-//    public DeleteObjectsResult deleteObjects(DeleteObjectsRequest deleteObjectsRequest) {
-//        Request<DeleteObjectsRequest> request = createRequest(deleteObjectsRequest.getBucketName(), null, deleteObjectsRequest, HttpMethodName.POST);
-//        request.addParameter("delete", null);
-//
-//        if ( deleteObjectsRequest.getMfa() != null ) {
-//            populateRequestWithMfaDetails(request, deleteObjectsRequest.getMfa());
-//        }
-//
-//        byte[] content = new MultiObjectDeleteXmlFactory().convertToXmlByteArray(deleteObjectsRequest);
-//        request.addHeader("Content-Length", String.valueOf(content.length));
-//        request.addHeader("Content-Type", "application/xml");
-//        request.setContent(new ByteArrayInputStream(content));
-//        try {
-//            byte[] md5 = Md5Utils.computeMD5Hash(content);
-//            String md5Base64 = BinaryUtils.toBase64(md5);
-//            request.addHeader("Content-MD5", md5Base64);
-//        } catch ( Exception e ) {
-//            throw new SCSClientException("Couldn't compute md5 sum", e);
-//        }
-//
-//        DeleteObjectsResponse response = invoke(request, new Unmarshallers.DeleteObjectsResultUnmarshaller(), deleteObjectsRequest.getBucketName(), null);
-//
-//        /*
-//         * If the result was only partially successful, throw an exception
-//         */
-//        if ( !response.getErrors().isEmpty() ) {
-//            throw new MultiObjectDeleteException(response.getErrors(), response.getDeletedObjects());
-//        }
-//
-//        return new DeleteObjectsResult(response.getDeletedObjects());
-//    }
 
     /* (non-Javadoc)
      * @see com.amazonaws.services.s3.AmazonS3#generatePresignedUrl(java.lang.String, java.lang.String, java.util.Date)
@@ -1486,29 +1215,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         return ServiceUtils.convertRequestToUrl(request, true);
     }
 
-//    /* (non-Javadoc)
-//     * @see com.amazonaws.services.s3.AmazonS3#abortMultipartUpload(com.amazonaws.services.s3.model.AbortMultipartUploadRequest)
-//     */
-//    public void abortMultipartUpload(AbortMultipartUploadRequest abortMultipartUploadRequest)
-//            throws SCSClientException, SCSServiceException {
-//        assertParameterNotNull(abortMultipartUploadRequest,
-//            "The request parameter must be specified when aborting a multipart upload");
-//        assertParameterNotNull(abortMultipartUploadRequest.getBucketName(),
-//            "The bucket name parameter must be specified when aborting a multipart upload");
-//        assertParameterNotNull(abortMultipartUploadRequest.getKey(),
-//            "The key parameter must be specified when aborting a multipart upload");
-//        assertParameterNotNull(abortMultipartUploadRequest.getUploadId(),
-//            "The upload ID parameter must be specified when aborting a multipart upload");
-//
-//        String bucketName = abortMultipartUploadRequest.getBucketName();
-//        String key = abortMultipartUploadRequest.getKey();
-//
-//        Request<AbortMultipartUploadRequest> request = createRequest(bucketName, key, abortMultipartUploadRequest, HttpMethodName.DELETE);
-//        request.addParameter("uploadId", abortMultipartUploadRequest.getUploadId());
-//
-//        invoke(request, voidResponseHandler, bucketName, key);
-//    }
-//
     /* (non-Javadoc)
      * @see com.amazonaws.services.s3.AmazonS3#completeMultipartUpload(com.amazonaws.services.s3.model.CompleteMultipartUploadRequest)
      */
@@ -1533,29 +1239,14 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         Request<CompleteMultipartUploadRequest> request = createRequest(bucketName, key, completeMultipartUploadRequest, HttpMethodName.POST);
         request.addParameter("uploadId", uploadId);
 
-        byte[] json = RequestJsonFactory.convertToXmlByteArray(completeMultipartUploadRequest.getPartETags());
+        byte[] json = RequestJsonFactory.convertToJsonByteArray(completeMultipartUploadRequest.getPartETags());
         request.addHeader("Content-Type", "text/plain");
         request.addHeader("Content-Length", String.valueOf(json.length));
 
         request.setContent(new ByteArrayInputStream(json));
 
-        
         ObjectMetadata returnedMetadata = invoke(request, new S3MetadataResponseHandler(), bucketName, key);
         return returnedMetadata;
-        
-//        @SuppressWarnings("unchecked")
-//        ResponseHeaderHandlerChain<CompleteMultipartUploadHandler> responseHandler = new ResponseHeaderHandlerChain<CompleteMultipartUploadHandler>(
-//                new Unmarshallers.CompleteMultipartUploadResultUnmarshaller(),
-//                new ServerSideEncryptionHeaderHandler<CompleteMultipartUploadHandler>(),
-//                new ObjectExpirationHeaderHandler<CompleteMultipartUploadHandler>());
-//        CompleteMultipartUploadHandler handler = invoke(request, responseHandler, bucketName, key);
-//        if (handler.getCompleteMultipartUploadResult() != null) {
-//            String versionId = responseHandler.getResponseHeaders().get(Headers.S3_VERSION_ID);
-//            handler.getCompleteMultipartUploadResult().setVersionId(versionId);
-//            return handler.getCompleteMultipartUploadResult();
-//        } else {
-//            throw handler.getAmazonS3Exception();
-//        }
     }
 
     /*
@@ -1609,29 +1300,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         return invoke(request, responseHandler,
                 initiateMultipartUploadRequest.getBucketName(), initiateMultipartUploadRequest.getKey());
     }
-
-//    /* (non-Javadoc)
-//     * @see com.amazonaws.services.s3.AmazonS3#listMultipartUploads(com.amazonaws.services.s3.model.ListMultipartUploadsRequest)
-//     */
-//    public MultipartUploadListing listMultipartUploads(ListMultipartUploadsRequest listMultipartUploadsRequest)
-//            throws SCSClientException, SCSServiceException {
-//        assertParameterNotNull(listMultipartUploadsRequest,
-//            "The request parameter must be specified when listing multipart uploads");
-//
-//        assertParameterNotNull(listMultipartUploadsRequest.getBucketName(),
-//            "The bucket name parameter must be specified when listing multipart uploads");
-//
-//        Request<ListMultipartUploadsRequest> request = createRequest(listMultipartUploadsRequest.getBucketName(), null, listMultipartUploadsRequest, HttpMethodName.GET);
-//        request.addParameter("uploads", null);
-//
-//        if (listMultipartUploadsRequest.getKeyMarker() != null) request.addParameter("key-marker", listMultipartUploadsRequest.getKeyMarker());
-//        if (listMultipartUploadsRequest.getMaxUploads() != null) request.addParameter("max-uploads", listMultipartUploadsRequest.getMaxUploads().toString());
-//        if (listMultipartUploadsRequest.getUploadIdMarker() != null) request.addParameter("upload-id-marker", listMultipartUploadsRequest.getUploadIdMarker());
-//        if (listMultipartUploadsRequest.getDelimiter() != null) request.addParameter("delimiter", listMultipartUploadsRequest.getDelimiter());
-//        if (listMultipartUploadsRequest.getPrefix() != null) request.addParameter("prefix", listMultipartUploadsRequest.getPrefix());
-//
-//        return invoke(request, new Unmarshallers.ListMultipartUploadsResultUnmarshaller(), listMultipartUploadsRequest.getBucketName(), null);
-//    }
 
     /* (non-Javadoc)
      * @see com.amazonaws.services.s3.AmazonS3#listParts(com.amazonaws.services.s3.model.ListPartsRequest)
@@ -2084,23 +1752,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         String copySourceHeader =
              "/" + HttpUtils.urlEncode(copyObjectRequest.getSourceBucketName(), true)
            + "/" + HttpUtils.urlEncode(copyObjectRequest.getSourceKey(), true);
-//    	String copySourceHeader = null;
-//		try {
-//			copySourceHeader = "/" + HttpUtils.urlEncode(copyObjectRequest.getSourceBucketName(), true)
-//           + "/" + new String(copyObjectRequest.getSourceKey().getBytes(),"utf-8");
-//		} catch (UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-    	
-//    	String copySourceHeader = null;
-//		try {
-//			copySourceHeader = "/" + HttpUtils.urlEncode(copyObjectRequest.getSourceBucketName(), true)
-//           + "/" + new String(copyObjectRequest.getSourceKey().getBytes("UTF-8"),"ISO-8859-1");
-//		} catch (UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
     	
         if (copyObjectRequest.getSourceVersionId() != null) {
             copySourceHeader += "?versionId=" + copyObjectRequest.getSourceVersionId();
@@ -2138,44 +1789,6 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
             populateRequestMetadata(request, newObjectMetadata);
         }
     }
-
-//    /**
-//     * <p>
-//     * Populates the specified request with the numerous options available in
-//     * <code>CopyObjectRequest</code>.
-//     * </p>
-//     *
-//     * @param request
-//     *            The request to populate with headers to represent all the
-//     *            options expressed in the <code>CopyPartRequest</code> object.
-//     * @param copyPartRequest
-//     *            The object containing all the options for copying an object in
-//     *            Amazon S3.
-//     */
-//    private static void populateRequestWithCopyPartParameters(Request<?> request, CopyPartRequest copyPartRequest) {
-//        String copySourceHeader =
-//             "/" + HttpUtils.urlEncode(copyPartRequest.getSourceBucketName(), true)
-//           + "/" + HttpUtils.urlEncode(copyPartRequest.getSourceKey(), true);
-//        if (copyPartRequest.getSourceVersionId() != null) {
-//            copySourceHeader += "?versionId=" + copyPartRequest.getSourceVersionId();
-//        }
-//        request.addHeader("x-amz-copy-source", copySourceHeader);
-//
-//        addDateHeader(request, Headers.COPY_SOURCE_IF_MODIFIED_SINCE,
-//                copyPartRequest.getModifiedSinceConstraint());
-//        addDateHeader(request, Headers.COPY_SOURCE_IF_UNMODIFIED_SINCE,
-//                copyPartRequest.getUnmodifiedSinceConstraint());
-//
-//        addStringListHeader(request, Headers.COPY_SOURCE_IF_MATCH,
-//                copyPartRequest.getMatchingETagConstraints());
-//        addStringListHeader(request, Headers.COPY_SOURCE_IF_NO_MATCH,
-//                copyPartRequest.getNonmatchingETagConstraints());
-//
-//        if ( copyPartRequest.getFirstByte() != null && copyPartRequest.getLastByte() != null ) {
-//            String range = "bytes=" + copyPartRequest.getFirstByte() + "-" + copyPartRequest.getLastByte();
-//            request.addHeader(Headers.COPY_PART_RANGE, range);
-//        }
-//    }
 
     /**
      * <p>

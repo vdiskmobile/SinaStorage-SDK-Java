@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.sina.scs.model.PartETag;
-import com.sina.util.json.Jackson;
 
 public class RequestJsonFactory {
 
@@ -19,17 +19,18 @@ public class RequestJsonFactory {
      *
      * @return A byte array containing the data
      */
-    public static byte[] convertToXmlByteArray(List<PartETag> partETags) {
+    public static byte[] convertToJsonByteArray(List<PartETag> partETags) {
     	
     	ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
     	for(PartETag pet : partETags){
     		HashMap<String,Object> map = new HashMap<String,Object>();
-    		map.put("PartNumber", new Integer(pet.getPartNumber()));
+    		map.put("PartNumber", Integer.valueOf(pet.getPartNumber()));
     		map.put("ETag", pet.getETag());
     		list.add(map);
     	}
     	
-    	String jsonStr = Jackson.toJsonString(list);
+    	Gson gson = new Gson();
+    	String jsonStr = gson.toJson(list);
     	
     	return jsonStr.getBytes();
     }

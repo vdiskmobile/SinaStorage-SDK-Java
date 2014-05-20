@@ -66,7 +66,7 @@ public class S3ObjectSummary {
 			this.owner = new Owner((String) jsonMap.get("Owner"),"");
 			this.eTag = (String) jsonMap.get("MD5");
 			this.contentType = (String) jsonMap.get("Content-Type");
-			this.size = (Integer) jsonMap.get("Size");
+			this.size = ((Double) jsonMap.get("Size")).intValue();
 		}
 	}
 	

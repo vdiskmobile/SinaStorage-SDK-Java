@@ -69,8 +69,8 @@ public class ObjectListing {
 			this.prefix = (String) jsonMap.get("Prefix");
 			this.commonPrefixes = (List<String>) jsonMap.get("CommonPrefixes");
 			this.marker = (String) jsonMap.get("Marker");
-			this.contentsQuantity = (Integer) jsonMap.get("ContentsQuantity");
-			this.commonPrefixesQuantity = (Integer) jsonMap.get("CommonPrefixesQuantity");
+			this.contentsQuantity = ((Double) jsonMap.get("ContentsQuantity")).intValue();
+			this.commonPrefixesQuantity = ((Double) jsonMap.get("CommonPrefixesQuantity")).intValue();
 			this.nextMarker = (String) jsonMap.get("NextMarker");
 			this.isTruncated = (Boolean) jsonMap.get("IsTruncated");
 			
