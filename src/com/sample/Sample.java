@@ -72,7 +72,7 @@ public class Sample {
 	 * 删除bucket
 	 */
 	public void deleteBucket(){
-		conn.deleteBucket("create-a-bucket");
+		conn.deleteBucket("create-a-bucket1212121");
 	}
 	
 	/**
@@ -182,7 +182,7 @@ public class Sample {
 	 * 秒传
 	 */
 	public void putObjectRelax(){
-		conn.putObjectRelax("asdasdasdasd","awsdas阿斯顿.txt","4a09518d3c402d0a444e2f6c964a1b5a0c206455",48);
+		conn.putObjectRelax("asdasdasdasd","magnet.txt","4322fec3dd44787585f818a2d7bfa85ae0b664ab",12526362624l);
 	}
 	
 	/**
@@ -372,10 +372,10 @@ public class Sample {
 //		sample.getAllBuckets();
 		/* Bucket操作 */
 //		sample.createBucket();
-//		sample.deleteBucket();
+		sample.deleteBucket();
 //		sample.getBucketAcl();
 //		sample.putBucketAcl();
-		sample.listObjects();
+//		sample.listObjects();
 		/* Object操作 */
 //		sample.getObjectMetadata();
 //		sample.getObject();

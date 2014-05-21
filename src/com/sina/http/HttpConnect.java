@@ -33,6 +33,7 @@ import com.sina.http.httpclientandroidlib.client.methods.HttpRequestBase;
 import com.sina.http.httpclientandroidlib.protocol.BasicHttpContext;
 import com.sina.http.httpclientandroidlib.protocol.HttpContext;
 import com.sina.http.retry.RetryUtils;
+import com.sina.retry.RetryPolicy;
 import com.sina.util.DateUtils;
 
 /**
@@ -64,33 +65,6 @@ public class HttpConnect {
 		this.httpClient = httpClientFactory.createHttpClient(config);
 	}
 
-//	/**
-//	 * 发送请求
-//	 * @throws IOException 
-//	 * @throws ClientProtocolException 
-//	 * @throws ErrorResponseException 
-//	 * @throws UnsupportedEncodingException 
-//	 * @throws ConnectException 
-//	 */
-//	public void execute(Request<?> request) throws
-//			ErrorResponseException, UnsupportedEncodingException, Exception {
-//		
-//		
-//		
-////		String requestUri = request.getUrl();
-////		
-////        //判断是否需要post方式访问服务器
-////        if (requestParam.requestMethod == RequestParcelable.RequestMethodPost) {
-////			httpRequest = getHttpPostRequest(requestUri);
-////		}else{
-////			httpRequest = getHttpGetRequest(requestUri);
-////		}
-//		
-//		httpRequest = httpRequestFactory.createHttpRequest(request, null);
-//        
-//        makeRequest();
-//	}
-	
 	 /**
      * Executes the request and returns the result.
      *
@@ -180,8 +154,8 @@ public class HttpConnect {
                 if (executionContext.getSigner() != null && executionContext.getCredentials() != null) {
 //                    awsRequestMetrics.startEvent(Field.RequestSigningTime);
                     try {
-                        executionContext.getSigner().sign(request,
-                                executionContext.getCredentials());
+						executionContext.getSigner().sign(request,
+								executionContext.getCredentials());
                     } finally {
 //                        awsRequestMetrics.endEvent(Field.RequestSigningTime);
                     }
@@ -206,7 +180,8 @@ public class HttpConnect {
                     try {
                         pauseBeforeNextRetry(request.getOriginalRequest(),
                                              retriedException,
-                                             requestCount);
+                                             requestCount,
+                                             config.getRetryPolicy());
                     } finally {
 //                        awsRequestMetrics.endEvent(Field.RetryPauseTime);
                     }
@@ -275,10 +250,11 @@ public class HttpConnect {
 //                    awsRequestMetrics.addProperty(Field.AWSErrorCode, ase.getErrorCode());
 //                    awsRequestMetrics.addProperty(Field.StatusCode, ase.getStatusCode());
                     
-                    if (!shouldRetry(request.getOriginalRequest(),
-                                     httpRequest,
-                                     ase,
-                                     requestCount)) {
+                	if (!shouldRetry(request.getOriginalRequest(),
+				            httpRequest,
+				            ase,
+				            requestCount,
+				            config.getRetryPolicy())) {
                         throw ase;
                     }
 
@@ -304,9 +280,10 @@ public class HttpConnect {
 
                 SCSClientException ace = new SCSClientException("Unable to execute HTTP request: " + ioe.getMessage(), ioe);
                 if (!shouldRetry(request.getOriginalRequest(),
-                                httpRequest,
-                                ace,
-                                requestCount)) {
+				            httpRequest,
+				            ace,
+				            requestCount,
+				            config.getRetryPolicy())) {
                     throw ace;
                 }
                 
@@ -392,22 +369,23 @@ public class HttpConnect {
      */
     private void pauseBeforeNextRetry(SCSWebServiceRequest originalRequest,
                                     SCSClientException previousException,
-                                    int requestCount) {
-    	//TODO:重试延时机制
-//        final int retries = requestCount // including next attempt
-//                            - 1          // number of attempted requests
-//                            - 1;         // number of attempted retries
+                                    int requestCount,
+                                    RetryPolicy retryPolicy) {
+
+        final int retries = requestCount // including next attempt
+                            - 1          // number of attempted requests
+                            - 1;         // number of attempted retries
         
-//        long delay = retryPolicy.getBackoffStrategy().delayBeforeNextRetry(
-//                originalRequest, previousException, retries);
-//        
-//        if (log.isDebugEnabled()) {
-//            log.debug("Retriable error detected, " +
-//                    "will retry in " + delay + "ms, attempt number: " + retries);
-//        }
+        long delay = retryPolicy.getBackoffStrategy().delayBeforeNextRetry(
+                originalRequest, previousException, retries);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("Retriable error detected, " +
+                    "will retry in " + delay + "ms, attempt number: " + retries);
+        }
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(delay);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SCSClientException(e.getMessage(), e);
@@ -610,18 +588,19 @@ public class HttpConnect {
     private boolean shouldRetry(SCSWebServiceRequest originalRequest,
                                 HttpRequestBase method, 
                                 SCSClientException exception, 
-                                int requestCount) {
+                                int requestCount,
+                                RetryPolicy retryPolicy) {
         final int retries = requestCount - 1;
         
         int maxErrorRetry = config.getMaxErrorRetry();
-//        // We should use the maxErrorRetry in
-//        // the RetryPolicy if either the user has not explicitly set it in
-//        // ClientConfiguration, or the RetryPolicy is configured to take
-//        // higher precedence.
-//        if ( maxErrorRetry < 0
-//                || !retryPolicy.isMaxErrorRetryInClientConfigHonored() ) {
-//            maxErrorRetry = retryPolicy.getMaxErrorRetry();
-//        }
+        // We should use the maxErrorRetry in
+        // the RetryPolicy if either the user has not explicitly set it in
+        // ClientConfiguration, or the RetryPolicy is configured to take
+        // higher precedence.
+        if ( maxErrorRetry < 0
+                || !retryPolicy.isMaxErrorRetryInClientConfigHonored() ) {
+            maxErrorRetry = retryPolicy.getMaxErrorRetry();
+        }
         
         // Immediately fails when it has exceeds the max retry count.
         if (retries >= maxErrorRetry) return false;
@@ -637,13 +616,11 @@ public class HttpConnect {
             }
         }
         
-        //TODO:需要修复
-//        // Pass all the context information to the RetryCondition and let it
-//        // decide whether it should be retried.
-//        return retryPolicy.getRetryCondition().shouldRetry(originalRequest,
-//                                                           exception,
-//                                                           retries);
-        return true;
+        // Pass all the context information to the RetryCondition and let it
+        // decide whether it should be retried.
+        return retryPolicy.getRetryCondition().shouldRetry(originalRequest,
+                                                           exception,
+                                                           retries);
     }
     
     /**

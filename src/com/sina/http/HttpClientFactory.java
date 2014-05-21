@@ -53,6 +53,7 @@ import com.sina.http.httpclientandroidlib.params.HttpConnectionParams;
 import com.sina.http.httpclientandroidlib.params.HttpParams;
 import com.sina.http.httpclientandroidlib.protocol.HttpContext;
 import com.sina.http.impl.client.SdkHttpClient;
+import com.sina.http.impl.client.SdkHttpRequestRetryHandler;
 
 /** Responsible for creating and configuring instances of Apache HttpClient4. */
 class HttpClientFactory {
@@ -88,7 +89,7 @@ class HttpClientFactory {
                 .createPoolingClientConnManager(config, httpClientParams);
         SdkHttpClient httpClient = new SdkHttpClient(connectionManager, httpClientParams);
         if(config.getMaxErrorRetry() > 0)
-        	httpClient.setHttpRequestRetryHandler(config.getRetryPolicy());
+        	httpClient.setHttpRequestRetryHandler(SdkHttpRequestRetryHandler.Singleton);
 //        httpClient.setRedirectStrategy(new LocationHeaderNotRequiredRedirectStrategy());
 
         try {
@@ -104,7 +105,7 @@ class HttpClientFactory {
             throw new SCSClientException("Unable to access default SSL context", e);
         }
 
-//        /* TODO:SSL cert
+//        /* 
 //         * If SSL cert checking for endpoints has been explicitly disabled,
 //         * register a new scheme for HTTPS that won't cause self-signed certs to
 //         * error out.

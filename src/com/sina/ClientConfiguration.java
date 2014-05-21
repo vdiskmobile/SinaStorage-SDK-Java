@@ -19,6 +19,7 @@ import com.sina.http.IdleConnectionReaper;
 import com.sina.http.httpclientandroidlib.annotation.NotThreadSafe;
 import com.sina.http.httpclientandroidlib.client.HttpRequestRetryHandler;
 import com.sina.http.retry.PredefinedRetryPolicies;
+import com.sina.retry.RetryPolicy;
 import com.sina.util.VersionInfoUtils;
 /**
  * Client configuration options such as proxy settings, user agent string, max
@@ -47,13 +48,13 @@ public class ClientConfiguration {
     /**
      * 默认http重试机制
      */
-    public static final HttpRequestRetryHandler DEFAULT_RETRY_POLICY = PredefinedRetryPolicies.DEFAULT;
+    public static final RetryPolicy DEFAULT_RETRY_POLICY = PredefinedRetryPolicies.DEFAULT;
     
     /** The HTTP user agent header passed with all HTTP requests. */
     private String userAgent = DEFAULT_USER_AGENT;
 
     /** The retry policy upon failed requests. **/
-    private HttpRequestRetryHandler retryPolicy = DEFAULT_RETRY_POLICY;
+    private RetryPolicy retryPolicy = DEFAULT_RETRY_POLICY;
 
     /**
      * The protocol to use when connecting to Amazon Web Services.
@@ -489,7 +490,7 @@ public class ClientConfiguration {
      * 
      * @return The retry policy upon failed requests.
      */
-    public HttpRequestRetryHandler getRetryPolicy() {
+    public RetryPolicy getRetryPolicy() {
         return retryPolicy;
     }
 
@@ -501,7 +502,7 @@ public class ClientConfiguration {
      * @param retryPolicy
      *            The retry policy upon failed requests.
      */
-    public void setRetryPolicy(HttpRequestRetryHandler retryPolicy) {
+    public void setRetryPolicy(RetryPolicy retryPolicy) {
         this.retryPolicy = retryPolicy;
     }
     
@@ -513,7 +514,7 @@ public class ClientConfiguration {
      * @param retryPolicy
      *            The retry policy upon failed requests.
      */
-    public ClientConfiguration withRetryPolicy(HttpRequestRetryHandler retryPolicy) {
+    public ClientConfiguration withRetryPolicy(RetryPolicy retryPolicy) {
         setRetryPolicy(retryPolicy);
         return this;
     }
