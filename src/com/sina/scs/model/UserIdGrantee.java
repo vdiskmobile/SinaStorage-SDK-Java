@@ -18,21 +18,15 @@
 package com.sina.scs.model;
 
 /**
- * 
- * @author hanchao
+ * userid 对象
  *
  */
-public class AccessKeyIdGrantee implements Grantee {
-	
-//	GRPS000000ANONYMOUSE
-//	
-//	GRPS0000000CANONICAL
+public class UserIdGrantee implements Grantee {
 	
 	//匿名用户组 
-	public static final AccessKeyIdGrantee ANONYMOUSE = new AccessKeyIdGrantee("GRPS000000ANONYMOUSE");
+	public static final UserIdGrantee ANONYMOUSE = new UserIdGrantee("GRPS000000ANONYMOUSE");
 	//认证用户组
-	public static final AccessKeyIdGrantee CANONICAL = new AccessKeyIdGrantee("GRPS0000000CANONICAL");
-	
+	public static final UserIdGrantee CANONICAL = new UserIdGrantee("GRPS0000000CANONICAL");
 	
     private String accessKeyId = null;
     
@@ -44,13 +38,13 @@ public class AccessKeyIdGrantee implements Grantee {
     }
 
     /**
-     * Constructs a new {@link AccessKeyIdGrantee} object
+     * Constructs a new {@link UserIdGrantee} object
      * with the given email address.
      *
      * @param accessKeyId
      *        The e-mail address used to identify the e-mail grantee.
      */
-    public AccessKeyIdGrantee(String accessKeyId) {
+    public UserIdGrantee(String accessKeyId) {
         this.setIdentifier(accessKeyId);
     }
 
@@ -60,7 +54,7 @@ public class AccessKeyIdGrantee implements Grantee {
      * @param accessKeyId
      *        The e-mail address used to identify the e-mail grantee.
      *        
-     * @see AccessKeyIdGrantee#getIdentifier()       
+     * @see UserIdGrantee#getIdentifier()       
      */
     public void setIdentifier(String accessKeyId) {
         this.accessKeyId = accessKeyId;
@@ -69,7 +63,7 @@ public class AccessKeyIdGrantee implements Grantee {
     /**
      * Gets the grantee's e-mail address.
      * 
-     * @see AccessKeyIdGrantee#setIdentifier(string)     
+     * @see UserIdGrantee#setIdentifier(string)     
      */
     public String getIdentifier() {
         return accessKeyId;
@@ -97,7 +91,7 @@ public class AccessKeyIdGrantee implements Grantee {
             return false;
         if ( getClass() != obj.getClass() )
             return false;
-        AccessKeyIdGrantee other = (AccessKeyIdGrantee) obj;
+        UserIdGrantee other = (UserIdGrantee) obj;
         if ( accessKeyId == null ) {
             if ( other.accessKeyId != null )
                 return false;

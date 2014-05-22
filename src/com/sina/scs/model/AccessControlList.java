@@ -92,7 +92,7 @@ public class AccessControlList implements Serializable {
     	for(Entry<String,List<String>> entry : acl.entrySet()){
     		List<String> list = entry.getValue();
     		if(list!=null){
-    			this.grantPermission(new AccessKeyIdGrantee(entry.getKey()), 
+    			this.grantPermission(new UserIdGrantee(entry.getKey()), 
     					Permission.parsePermissions(entry.getValue()));
     			
     		}

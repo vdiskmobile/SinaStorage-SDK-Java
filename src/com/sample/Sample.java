@@ -21,7 +21,7 @@ import com.sina.event.ProgressListener;
 import com.sina.scs.SCS;
 import com.sina.scs.SCSClient;
 import com.sina.scs.model.AccessControlList;
-import com.sina.scs.model.AccessKeyIdGrantee;
+import com.sina.scs.model.UserIdGrantee;
 import com.sina.scs.model.Bucket;
 import com.sina.scs.model.CompleteMultipartUploadRequest;
 import com.sina.scs.model.InitiateMultipartUploadResult;
@@ -88,9 +88,9 @@ public class Sample {
 	 */
 	public void putBucketAcl(){
 		AccessControlList acl = new AccessControlList();
-		acl.grantPermissions(AccessKeyIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
-		acl.grantPermissions(AccessKeyIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
-		acl.grantPermissions(new AccessKeyIdGrantee("SINA000000"+accessKey), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+		acl.grantPermissions(UserIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
+		acl.grantPermissions(UserIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+		acl.grantPermissions(new UserIdGrantee("SINA0000001001NHT3M7"), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 		
 		conn.setBucketAcl("create-a-bucket11", acl);
 	}
@@ -231,9 +231,9 @@ public class Sample {
 	 */
 	public void putObjectAcl(){
 		AccessControlList acl = new AccessControlList();
-		acl.grantPermissions(AccessKeyIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
-		acl.grantPermissions(AccessKeyIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
-		acl.grantPermissions(new AccessKeyIdGrantee("SINA000000"+accessKey), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+		acl.grantPermissions(UserIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
+		acl.grantPermissions(UserIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+		acl.grantPermissions(new UserIdGrantee("SINA000000"+accessKey), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 		
 		conn.setObjectAcl("asdasdasdasd", "awsdas阿斯顿.txt", acl);
 	}
@@ -372,9 +372,9 @@ public class Sample {
 //		sample.getAllBuckets();
 		/* Bucket操作 */
 //		sample.createBucket();
-		sample.deleteBucket();
+//		sample.deleteBucket();
 //		sample.getBucketAcl();
-//		sample.putBucketAcl();
+		sample.putBucketAcl();
 //		sample.listObjects();
 		/* Object操作 */
 //		sample.getObjectMetadata();
