@@ -83,12 +83,12 @@
 		 */
 		public void putBucketAcl(){
 			AccessControlList acl = new AccessControlList();
-			acl.grantPermissions(AccessKeyIdGrantee.CANONICAL, Permission.Read, Permission.ReadAcp);
-			acl.grantPermissions(AccessKeyIdGrantee.ANONYMOUSE, 
+			acl.grantPermissions(UserIdGrantee.CANONICAL, Permission.Read, Permission.ReadAcp);
+			acl.grantPermissions(UserIdGrantee.ANONYMOUSE, 
 								Permission.ReadAcp,
 								Permission.Write,
 								Permission.WriteAcp);
-			acl.grantPermissions(new AccessKeyIdGrantee("SINA000000"+accessKey), 
+			acl.grantPermissions(new UserIdGrantee("UserId"), 
 								Permission.Read,
 								Permission.ReadAcp,
 								Permission.Write,
@@ -249,9 +249,9 @@
 		 */
 		public void putObjectAcl(){
 			AccessControlList acl = new AccessControlList();
-			acl.grantPermissions(AccessKeyIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
-			acl.grantPermissions(AccessKeyIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
-			acl.grantPermissions(new AccessKeyIdGrantee("SINA000000"+accessKey), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+			acl.grantPermissions(UserIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
+			acl.grantPermissions(UserIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+			acl.grantPermissions(new UserIdGrantee("UserId"), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 			
 			conn.setObjectAcl("bucket名称", "文件路径", acl);
 		}
