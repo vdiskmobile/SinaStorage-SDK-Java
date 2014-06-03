@@ -53,7 +53,26 @@ public class PutObjectResult implements ServerSideEncryptionResult, ObjectExpira
 
     /** The content MD5 */
     private String contentMd5;
+    
+    /** for miaopai file download url*/
+    private String serviceSideKey;
 
+    public String toString() {
+    	StringBuffer sb = new StringBuffer();
+    	sb.append("[PutObjectResult]");
+//    	sb.append("\nversionId:"+versionId);
+    	sb.append("\neTag:"+eTag);
+//    	sb.append("\nserverSideEncryption:"+serverSideEncryption);
+    	sb.append("\nexpirationTime:"+expirationTime);
+    	sb.append("\nexpirationTimeRuleId:"+expirationTimeRuleId);
+    	sb.append("\ncontentMd5:"+contentMd5);
+    	sb.append("\nserviceSideKey:"+serviceSideKey);
+    	
+    	return sb.toString();
+    }
+    
+    
+    
     /**
      * Gets the optional version ID of the newly uploaded object. This field will
      * be set only if object versioning is enabled for the bucket the
@@ -173,5 +192,13 @@ public class PutObjectResult implements ServerSideEncryptionResult, ObjectExpira
      */
     public String getContentMd5() {
         return contentMd5;
+    }
+    
+    public String getServiceSideKey() {
+    	return serviceSideKey;
+    }
+    
+    public void setServiceSideKey(String serviceSideKey) {
+    	this.serviceSideKey = serviceSideKey;
     }
 }

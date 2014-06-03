@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sina.SCSClientException;
 import com.sina.SCSServiceException;
@@ -21,7 +22,6 @@ import com.sina.event.ProgressListener;
 import com.sina.scs.SCS;
 import com.sina.scs.SCSClient;
 import com.sina.scs.model.AccessControlList;
-import com.sina.scs.model.UserIdGrantee;
 import com.sina.scs.model.Bucket;
 import com.sina.scs.model.CompleteMultipartUploadRequest;
 import com.sina.scs.model.InitiateMultipartUploadResult;
@@ -35,6 +35,7 @@ import com.sina.scs.model.PutObjectRequest;
 import com.sina.scs.model.PutObjectResult;
 import com.sina.scs.model.S3Object;
 import com.sina.scs.model.UploadPartRequest;
+import com.sina.scs.model.UserIdGrantee;
 import com.sina.scs.transfer.TransferManager;
 import com.sina.scs.transfer.Upload;
 import com.sina.scs.transfer.internal.UploadPartRequestFactory;
@@ -168,6 +169,16 @@ public class Sample {
 	 */
 	public void putObject(){
 		PutObjectResult putObjectResult = conn.putObject("asdasdasdasd", "asdf第三方地方阿333==斯蒂---芬这种111.pdf", new File("dage1.txt"));
+		System.out.println(putObjectResult);
+	}
+	
+	/**
+	 * 上传文件 for 秒拍
+	 */
+	public void putObjectForMiaopai(){
+		Map<String, String> requestHeader = new HashMap<String, String>();
+		requestHeader.put("x-sina-additional-indexed-key", "stream/test111.txt");
+		PutObjectResult putObjectResult = conn.putObject("sandbox2", "ssk/a/", new File("dage1.txt"),requestHeader);
 		System.out.println(putObjectResult);
 	}
 	
@@ -374,12 +385,13 @@ public class Sample {
 //		sample.createBucket();
 //		sample.deleteBucket();
 //		sample.getBucketAcl();
-		sample.putBucketAcl();
+//		sample.putBucketAcl();
 //		sample.listObjects();
 		/* Object操作 */
 //		sample.getObjectMetadata();
 //		sample.getObject();
 //		sample.putObject();
+		sample.putObjectForMiaopai();
 //		sample.copyObject();
 //		sample.putObjectRelax();
 //		sample.getObjectMeta();

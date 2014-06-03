@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.sina.HttpMethod;
 import com.sina.SCSClientException;
@@ -55,14 +56,14 @@ import com.sina.scs.model.UploadPartResult;
 
 /**
  * <p>
- * Provides an interface for accessing the Amazon S3 web service.
+ * Provides an interface for accessing the SCS web service.
  * </p>
  * <p>
- * Amazon S3 provides storage for the Internet,
+ * SCS provides storage for the Internet,
  * and is designed to make web-scale computing easier for developers.
  * </p>
  * <p>
- * The Amazon S3 Java SDK provides a simple interface that can be
+ * The SCS Java SDK provides a simple interface that can be
  * used to store and retrieve any amount of data, at any time,
  * from anywhere on the web. It gives any developer access to the same
  * highly scalable, reliable, secure, fast, inexpensive infrastructure
@@ -71,7 +72,7 @@ import com.sina.scs.model.UploadPartResult;
  * benefits on to developers.
  * </p>
  * <p>
- * For more information about Amazon S3, please see
+ * For more information about SCS, please see
  * <a href="http://aws.amazon.com/s3">
  * http://aws.amazon.com/s3</a>
  * </p>
@@ -96,7 +97,7 @@ public interface SCS {
      * <p>
      * Because buckets can contain a virtually unlimited number of keys, the
      * complete results of a list query can be extremely large. To manage large
-     * result sets, Amazon S3 uses pagination to split them into multiple
+     * result sets, SCS uses pagination to split them into multiple
      * responses. Always check the
      * {@link ObjectListing#isTruncated()} method to see if the returned
      * listing is complete or if additional calls are needed to get
@@ -110,7 +111,7 @@ public interface SCS {
      * </p>
      *
      * @param bucketName
-     *            The name of the Amazon S3 bucket to list.
+     *            The name of the SCS bucket to list.
      *
      * @return A listing of the objects in the specified bucket, along with any
      *         other associated information, such as common prefixes (if a
@@ -120,7 +121,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#listObjects(String, String)
@@ -139,7 +140,7 @@ public interface SCS {
      * <p>
      * Because buckets can contain a virtually unlimited number of keys, the
      * complete results of a list query can be extremely large. To manage large
-     * result sets, Amazon S3 uses pagination to split them into multiple
+     * result sets, SCS uses pagination to split them into multiple
      * responses. Always check the
      * {@link ObjectListing#isTruncated()} method to see if the returned
      * listing is complete or if additional calls are needed to get
@@ -169,7 +170,7 @@ public interface SCS {
      * </p>
      *
      * @param bucketName
-     *            The name of the Amazon S3 bucket to list.
+     *            The name of the SCS bucket to list.
      * @param prefix
      *            An optional parameter restricting the response to keys
      *            beginning with the specified prefix. Use prefixes to
@@ -185,7 +186,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#listObjects(String)
@@ -204,7 +205,7 @@ public interface SCS {
      * <p>
      * Because buckets can contain a virtually unlimited number of keys, the
      * complete results of a list query can be extremely large. To manage large
-     * result sets, Amazon S3 uses pagination to split them into multiple
+     * result sets, SCS uses pagination to split them into multiple
      * responses. Always check the
      * {@link ObjectListing#isTruncated()} method to see if the returned
      * listing is complete or if additional calls are needed to get
@@ -254,7 +255,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#listObjects(String)
@@ -285,7 +286,7 @@ public interface SCS {
      *            If a
      *            non-truncated <code>ObjectListing</code> is passed in, an empty
      *            <code>ObjectListing</code> is returned without ever contacting
-     *            Amazon S3.
+     *            SCS.
      *
      * @return The next set of <code>ObjectListing</code> results, beginning immediately
      *         after the last result in the specified previous <code>ObjectListing</code>.
@@ -294,7 +295,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#listObjects(String)
@@ -305,7 +306,7 @@ public interface SCS {
             throws SCSClientException, SCSServiceException;
 
     /**
-     * Checks if the specified bucket exists. Amazon S3 buckets are named in a
+     * Checks if the specified bucket exists. SCS buckets are named in a
      * global namespace; use this method to determine if a specified
      * bucket name already exists, and therefore can't be used to create a new
      * bucket.
@@ -314,14 +315,14 @@ public interface SCS {
      *            The name of the bucket to check.
      *
      * @return The value <code>true</code> if the specified bucket exists in
-     *         Amazon S3; the value
-     *         <code>false</code> if there is no bucket in Amazon S3 with that name.
+     *         SCS; the value
+     *         <code>false</code> if there is no bucket in SCS with that name.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#createBucket(CreateBucketRequest)
@@ -331,23 +332,23 @@ public interface SCS {
 
     /**
      * <p>
-     * Returns a list of all Amazon S3 buckets that the
+     * Returns a list of all SCS buckets that the
      * authenticated sender of the request owns.
      * </p>
      * <p>
      * Users must authenticate with a valid AWS Access Key ID that is registered
-     * with Amazon S3. Anonymous requests cannot list buckets, and users cannot
+     * with SCS. Anonymous requests cannot list buckets, and users cannot
      * list buckets that they did not create.
      * </p>
      *
-     * @return A list of all of the Amazon S3 buckets owned by the authenticated
+     * @return A list of all of the SCS buckets owned by the authenticated
      *         sender of the request.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#listBuckets(ListBucketsRequest)
@@ -357,12 +358,12 @@ public interface SCS {
 
     /**
      * <p>
-     * Returns a list of all Amazon S3 buckets that the
+     * Returns a list of all SCS buckets that the
      * authenticated sender of the request owns.
      * </p>
      * <p>
      * Users must authenticate with a valid AWS Access Key ID that is registered
-     * with Amazon S3. Anonymous requests cannot list buckets, and users cannot
+     * with SCS. Anonymous requests cannot list buckets, and users cannot
      * list buckets that they did not create.
      * </p>
      *
@@ -370,14 +371,14 @@ public interface SCS {
      *          The request containing all of the options related to the listing
      *          of buckets.
      *
-     * @return A list of all of the Amazon S3 buckets owned by the authenticated
+     * @return A list of all of the SCS buckets owned by the authenticated
      *         sender of the request.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#listBuckets()
@@ -387,20 +388,20 @@ public interface SCS {
 
     /**
      * <p>
-     * Creates a new Amazon S3 bucket in the default
+     * Creates a new SCS bucket in the default
      * </p>
      * <p>
-     * Every object stored in Amazon S3 is contained within a bucket. Buckets
-     * partition the namespace of objects stored in Amazon S3 at the top level.
+     * Every object stored in SCS is contained within a bucket. Buckets
+     * partition the namespace of objects stored in SCS at the top level.
      * Within a bucket, any name can be used for objects. However, bucket names
-     * must be unique across all of Amazon S3.
+     * must be unique across all of SCS.
      * </p>
      * <p>
      * Bucket ownership is similar to the ownership of Internet domain names.
-     * Within Amazon S3, only a single user owns each bucket.
-     * Once a uniquely named bucket is created in Amazon S3,
+     * Within SCS, only a single user owns each bucket.
+     * Once a uniquely named bucket is created in SCS,
      * organize and name the objects within the bucket in any way.
-     * Ownership of the bucket is retained as long as the owner has an Amazon S3 account.
+     * Ownership of the bucket is retained as long as the owner has an SCS account.
      * </p>
      * <p>
      * To conform with DNS requirements, the following constraints apply:
@@ -431,12 +432,12 @@ public interface SCS {
      * </p>
      * <p>
      * To create a bucket, authenticate with an account that has a
-     * valid AWS Access Key ID and is registered with Amazon S3. Anonymous
+     * valid AWS Access Key ID and is registered with SCS. Anonymous
      * requests are never allowed to create buckets.
      * </p>
      *
      * @param createBucketRequest
-     *            The request object containing all options for creating an Amazon S3
+     *            The request object containing all options for creating an SCS
      *            bucket.
      * @return The newly created bucket.
      *
@@ -444,7 +445,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public Bucket createBucket(CreateBucketRequest createBucketRequest)
@@ -453,20 +454,20 @@ public interface SCS {
 
     /**
      * <p>
-     * Creates a new Amazon S3 bucket with the specified name in the default
+     * Creates a new SCS bucket with the specified name in the default
      * </p>
      * <p>
-     * Every object stored in Amazon S3 is contained within a bucket. Buckets
-     * partition the namespace of objects stored in Amazon S3 at the top level.
+     * Every object stored in SCS is contained within a bucket. Buckets
+     * partition the namespace of objects stored in SCS at the top level.
      * Within a bucket, any name can be used for objects. However, bucket names
-     * must be unique across all of Amazon S3.
+     * must be unique across all of SCS.
      * </p>
      * <p>
      * Bucket ownership is similar to the ownership of Internet domain names.
-     * Within Amazon S3, only a single user owns each bucket.
-     * Once a uniquely named bucket is created in Amazon S3,
+     * Within SCS, only a single user owns each bucket.
+     * Once a uniquely named bucket is created in SCS,
      * organize and name the objects within the bucket in any way.
-     * Ownership of the bucket is retained as long as the owner has an Amazon S3 account.
+     * Ownership of the bucket is retained as long as the owner has an SCS account.
      * </p>
      * <p>
      * To conform with DNS requirements, the following constraints apply:
@@ -497,13 +498,13 @@ public interface SCS {
      * </p>
      * <p>
      * To create a bucket, authenticate with an account that has a
-     * valid AWS Access Key ID and is registered with Amazon S3. Anonymous
+     * valid AWS Access Key ID and is registered with SCS. Anonymous
      * requests are never allowed to create buckets.
      * </p>
      *
      * @param bucketName
      *            The name of the bucket to create.
-     *            All buckets in Amazon S3 share a single namespace;
+     *            All buckets in SCS share a single namespace;
      *            ensure the bucket is given a unique name.
      *
      * @return The newly created bucket.
@@ -512,7 +513,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public Bucket createBucket(String bucketName)
@@ -520,14 +521,14 @@ public interface SCS {
 
     /**
      * <p>
-     * Gets the {@link AccessControlList} (ACL) for the specified object in Amazon S3.
+     * Gets the {@link AccessControlList} (ACL) for the specified object in SCS.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      *
@@ -538,13 +539,13 @@ public interface SCS {
      *            The key of the object within the specified bucket whose ACL is
      *            being retrieved.
      *
-     * @return The <code>AccessControlList</code> for the specified Amazon S3 object.
+     * @return The <code>AccessControlList</code> for the specified SCS object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#getObjectAcl(String, String, String)
@@ -554,14 +555,14 @@ public interface SCS {
 
     /**
      * <p>
-     * Sets the {@link AccessControlList} for the specified object in Amazon S3.
+     * Sets the {@link AccessControlList} for the specified object in SCS.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      * <p>
@@ -585,7 +586,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#setObjectAcl(String, String, CannedAccessControlList)
@@ -598,18 +599,18 @@ public interface SCS {
     /**
      * <p>
      * Sets the {@link CannedAccessControlList} for the specified object in
-     * Amazon S3 using one
+     * SCS using one
      * of the pre-configured <code>CannedAccessControlLists</code>.
      * A <code>CannedAccessControlList</code>
      * provides a quick way to configure an object or bucket with commonly used
      * access control policies.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      *
@@ -627,7 +628,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#setObjectAcl(String, String, AccessControlList)
@@ -661,14 +662,14 @@ public interface SCS {
 
     /**
      * <p>
-     * Gets the {@link AccessControlList} (ACL) for the specified Amazon S3 bucket.
+     * Gets the {@link AccessControlList} (ACL) for the specified SCS bucket.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      *
@@ -681,20 +682,20 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public AccessControlList getBucketAcl(String bucketName) throws SCSClientException,
             SCSServiceException;
 
     /**
-     * Sets the {@link AccessControlList} for the specified Amazon S3 bucket.
+     * Sets the {@link AccessControlList} for the specified SCS bucket.
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * <p>
      * When constructing a custom <code>AccessControlList</code>, callers
@@ -710,21 +711,21 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public void setBucketAcl(SetBucketAclRequest setBucketAclRequest)
             throws SCSClientException, SCSServiceException;
 
     /**
-     * Gets the {@link AccessControlList} (ACL) for the specified Amazon S3
+     * Gets the {@link AccessControlList} (ACL) for the specified SCS
      * bucket.
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      *
      * @param getBucketAclRequest
@@ -737,7 +738,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public AccessControlList getBucketAcl(GetBucketAclRequest getBucketAclRequest)
@@ -745,14 +746,14 @@ public interface SCS {
 
     /**
      * <p>
-     * Sets the {@link AccessControlList} for the specified Amazon S3 bucket.
+     * Sets the {@link AccessControlList} for the specified SCS bucket.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      * <p>
@@ -770,7 +771,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#setBucketAcl(String, CannedAccessControlList)
@@ -780,18 +781,18 @@ public interface SCS {
 
     /**
      * <p>
-     * Sets the {@link CannedAccessControlList} for the specified Amazon S3 bucket using one of
+     * Sets the {@link CannedAccessControlList} for the specified SCS bucket using one of
      * the pre-configured <code>CannedAccessControlLists</code>.
      * A <code>CannedAccessControlList</code>
      * provides a quick way to configure an object or bucket with commonly used
      * access control policies.
      * </p>
      * <p>
-     * Each bucket and object in Amazon S3 has an ACL that defines its access
-     * control policy. When a request is made, Amazon S3 authenticates the
+     * Each bucket and object in SCS has an ACL that defines its access
+     * control policy. When a request is made, SCS authenticates the
      * request using its standard authentication procedure and then checks the
      * ACL to verify the sender was granted access to the bucket or object. If
-     * the sender is approved, the request proceeds. Otherwise, Amazon S3
+     * the sender is approved, the request proceeds. Otherwise, SCS
      * returns an error.
      * </p>
      *
@@ -805,7 +806,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#setBucketAcl(String, AccessControlList)
@@ -815,7 +816,7 @@ public interface SCS {
 
     /**
      * <p>
-     * Gets the metadata for the specified Amazon S3 object without
+     * Gets the metadata for the specified SCS object without
      * actually fetching the object itself.
      * This is useful in obtaining only the object metadata,
      * and avoids wasting bandwidth on fetching
@@ -824,7 +825,7 @@ public interface SCS {
      * <p>
      * The object metadata contains information such as content type, content
      * disposition, etc., as well as custom user metadata that can be associated
-     * with an object in Amazon S3.
+     * with an object in SCS.
      * </p>
      *
      * @param bucketName
@@ -833,13 +834,13 @@ public interface SCS {
      * @param key
      *            The key of the object whose metadata is being retrieved.
      *
-     * @return All Amazon S3 object metadata for the specified object.
+     * @return All SCS object metadata for the specified object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#getObjectMetadata(GetObjectMetadataRequest)
@@ -858,7 +859,7 @@ public interface SCS {
     
     /**
      * <p>
-     * Gets the metadata for the specified Amazon S3 object without
+     * Gets the metadata for the specified SCS object without
      * actually fetching the object itself.
      * This is useful in obtaining only the object metadata,
      * and avoids wasting bandwidth on fetching
@@ -867,7 +868,7 @@ public interface SCS {
      * <p>
      * The object metadata contains information such as content type, content
      * disposition, etc., as well as custom user metadata that can be associated
-     * with an object in Amazon S3.
+     * with an object in SCS.
      * </p>
      * <p>
      * For more information about enabling versioning for a bucket, see
@@ -884,7 +885,7 @@ public interface SCS {
      *             If any errors are encountered on the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#getObjectMetadata(String, String)
@@ -894,25 +895,25 @@ public interface SCS {
 
     /**
      * <p>
-     * Gets the object stored in Amazon S3 under the specified bucket and
+     * Gets the object stored in SCS under the specified bucket and
      * key.
      * </p>
      * <p>
      * Be extremely careful when using this method; the returned
-     * Amazon S3 object contains a direct stream of data from the HTTP connection.
+     * SCS object contains a direct stream of data from the HTTP connection.
      * The underlying HTTP connection cannot be closed until the user
      * finishes reading the data and closes the stream.
      * Therefore:
      * </p>
      * <ul>
-     *  <li>Use the data from the input stream in Amazon S3 object as soon as possible</li>
-     *  <li>Close the input stream in Amazon S3 object as soon as possible</li>
+     *  <li>Use the data from the input stream in SCS object as soon as possible</li>
+     *  <li>Close the input stream in SCS object as soon as possible</li>
      * </ul>
      * If these rules are not followed, the client can run out of
      * resources by allocating too many open, but unused, HTTP connections.
      * </p>
      * <p>
-     * To get an object from Amazon S3, the caller must have {@link Permission#Read}
+     * To get an object from SCS, the caller must have {@link Permission#Read}
      * access to the object.
      * </p>
      * <p>
@@ -930,13 +931,13 @@ public interface SCS {
      * @param key
      *            The key under which the desired object is stored.
      *
-     * @return The object stored in Amazon S3 in the specified bucket and key.
+     * @return The object stored in SCS in the specified bucket and key.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#getObject(GetObjectRequest)
@@ -947,27 +948,27 @@ public interface SCS {
 
     /**
      * <p>
-     * Gets the object stored in Amazon S3 under the specified bucket and
+     * Gets the object stored in SCS under the specified bucket and
      * key.
      * Returns <code>null</code> if the specified constraints weren't met.
      * </p>
      * <p>
      * Callers should be very careful when using this method; the returned
-     * Amazon S3 object contains a direct stream of data from the HTTP connection.
+     * SCS object contains a direct stream of data from the HTTP connection.
      * The underlying HTTP connection cannot be closed until the user
      * finishes reading the data and closes the stream. Callers should
      * therefore:
      * </p>
      * <ul>
-     *  <li>Use the data from the input stream in Amazon S3 object as soon as possible,</li>
-     *  <li>Close the input stream in Amazon S3 object as soon as possible.</li>
+     *  <li>Use the data from the input stream in SCS object as soon as possible,</li>
+     *  <li>Close the input stream in SCS object as soon as possible.</li>
      * </ul>
      * <p>
      * If callers do not follow those rules, then the client can run out of
      * resources if allocating too many open, but unused, HTTP connections.
      * </p>
      * <p>
-     * To get an object from Amazon S3, the caller must have {@link Permission#Read}
+     * To get an object from SCS, the caller must have {@link Permission#Read}
      * access to the object.
      * </p>
      * <p>
@@ -977,7 +978,7 @@ public interface SCS {
      * <p>
      * When specifying constraints in the request object, the client needs to be
      * prepared to handle this method returning <code>null</code>
-     * if the provided constraints aren't met when Amazon S3 receives the request.
+     * if the provided constraints aren't met when SCS receives the request.
      * </p>
      * <p>
      * If the advanced options provided in {@link GetObjectRequest} aren't needed,
@@ -988,14 +989,14 @@ public interface SCS {
      *            The request object containing all the options on how to
      *            download the object.
      *
-     * @return The object stored in Amazon S3 in the specified bucket and key.
+     * @return The object stored in SCS in the specified bucket and key.
      *         Returns <code>null</code> if constraints were specified but not met.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      * @see SCS#getObject(String, String)
      * @see SCS#getObject(GetObjectRequest, File)
@@ -1007,7 +1008,7 @@ public interface SCS {
     /**
      * <p>
      * Gets the object metadata for the object stored
-     * in Amazon S3 under the specified bucket and key,
+     * in SCS under the specified bucket and key,
      * and saves the object contents to the
      * specified file.
      * Returns <code>null</code> if the specified constraints weren't met.
@@ -1017,11 +1018,11 @@ public interface SCS {
      * using {@link SCS#getObject(GetObjectRequest)},
      * use this method to ensure that the underlying
      * HTTP stream resources are automatically closed as soon as possible.
-     * The Amazon S3 clients handles immediate storage of the object
+     * The SCS clients handles immediate storage of the object
      * contents to the specified file.
      * </p>
      * <p>
-     * To get an object from Amazon S3, the caller must have {@link Permission#Read}
+     * To get an object from SCS, the caller must have {@link Permission#Read}
      * access to the object.
      * </p>
      * <p>
@@ -1031,15 +1032,15 @@ public interface SCS {
      * <p>
      * When specifying constraints in the request object, the client needs to be
      * prepared to handle this method returning <code>null</code>
-     * if the provided constraints aren't met when Amazon S3 receives the request.
+     * if the provided constraints aren't met when SCS receives the request.
      * </p>
      *
      * @param getObjectRequest
      *            The request object containing all the options on how to
-     *            download the Amazon S3 object content.
+     *            download the SCS object content.
      * @param destinationFile
      *            Indicates the file (which might already exist) where
-     *            to save the object content being downloading from Amazon S3.
+     *            to save the object content being downloading from SCS.
      *
      * @return All S3 object metadata for the specified object.
      *         Returns <code>null</code> if constraints were specified but not met.
@@ -1049,7 +1050,7 @@ public interface SCS {
      *             request, handling the response, or writing the incoming data
      *             from S3 to the specified destination file.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#getObject(String, String)
@@ -1070,13 +1071,13 @@ public interface SCS {
      * </p>
      *
      * @param deleteBucketRequest
-     *            The request object containing all options for deleting an Amazon S3
+     *            The request object containing all options for deleting an SCS
      *            bucket.
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#deleteBucket(String)
@@ -1103,7 +1104,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#deleteBucket(String)
@@ -1113,14 +1114,14 @@ public interface SCS {
 
     /**
      * <p>
-     * Uploads a new object to the specified Amazon S3 bucket.
+     * Uploads a new object to the specified SCS bucket.
      * The <code>PutObjectRequest</code> contains all the
      * details of the request, including the bucket to upload to, the key the
      * object will be uploaded under, and the file or input stream containing the data
      * to upload.
      * </p>
      * <p>
-     * Amazon S3 never stores partial objects; if during this call
+     * SCS never stores partial objects; if during this call
      * an exception wasn't thrown, the entire object was stored.
      * </p>
      * <p>
@@ -1134,10 +1135,10 @@ public interface SCS {
      *  <li>
      *  The client automatically computes
      *  a checksum of the file.
-     *  Amazon S3 uses checksums to validate the data in each file.
+     *  SCS uses checksums to validate the data in each file.
      *  </li>
      *  <li>
-     *  Using the file extension, Amazon S3 attempts to determine
+     *  Using the file extension, SCS attempts to determine
      *  the correct content type and content disposition to use
      *  for the object.
      *  </li>
@@ -1150,10 +1151,10 @@ public interface SCS {
      *  correct content type in the metadata object before directly sending a
      *  stream. Unlike file uploads, content types from input streams
      *  cannot be automatically determined.  If the caller doesn't explicitly set
-     *  the content type, it will not be set in Amazon S3.
+     *  the content type, it will not be set in SCS.
      *  </li>
      *  <li>Content length <b>must</b> be specified before data can be uploaded
-     *  to Amazon S3. Amazon S3 explicitly requires that the
+     *  to SCS. SCS explicitly requires that the
      *  content length be sent in the request headers before it
      *  will accept any of the data. If the caller doesn't provide
      *  the length, the library must buffer the contents of the
@@ -1171,9 +1172,9 @@ public interface SCS {
 
      * <p>
      * If versioning is not enabled, this operation will overwrite an existing object
-     * with the same key; Amazon S3 will store the last write request.
-     * Amazon S3 does not provide object locking.
-     * If Amazon S3 receives multiple write requests for the same object nearly
+     * with the same key; SCS will store the last write request.
+     * SCS does not provide object locking.
+     * If SCS receives multiple write requests for the same object nearly
      * simultaneously, all of the objects might be stored.  However, a single
      * object will be stored with the final write request.
      * </p>
@@ -1191,16 +1192,16 @@ public interface SCS {
      *
      * @param putObjectRequest
      *            The request object containing all the parameters to upload a
-     *            new object to Amazon S3.
+     *            new object to SCS.
      *
      * @return A {@link PutObjectResult} object containing the information
-     *         returned by Amazon S3 for the newly created object.
+     *         returned by SCS for the newly created object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#putObject(String, String, File)
@@ -1211,21 +1212,21 @@ public interface SCS {
 
     /**
      * <p>
-     * Uploads the specified file to Amazon S3 under the specified bucket and
+     * Uploads the specified file to SCS under the specified bucket and
      * key name.
      * </p>
      * <p>
-     * Amazon S3 never stores partial objects;
+     * SCS never stores partial objects;
      * if during this call an exception wasn't thrown,
      * the entire object was stored.
      * </p>
      * <p>
      * The client automatically computes
      * a checksum of the file.
-     * Amazon S3 uses checksums to validate the data in each file.
+     * SCS uses checksums to validate the data in each file.
      * </p>
      * <p>
-     *  Using the file extension, Amazon S3 attempts to determine
+     *  Using the file extension, SCS attempts to determine
      *  the correct content type and content disposition to use
      *  for the object.
      * </p>
@@ -1241,9 +1242,9 @@ public interface SCS {
      * </p>
      * <p>
      * If versioning is not enabled, this operation will overwrite an existing object
-     * with the same key; Amazon S3 will store the last write request.
-     * Amazon S3 does not provide object locking.
-     * If Amazon S3 receives multiple write requests for the same object nearly
+     * with the same key; SCS will store the last write request.
+     * SCS does not provide object locking.
+     * If SCS receives multiple write requests for the same object nearly
      * simultaneously, all of the objects might be stored.  However, a single
      * object will be stored with the final write request.
      * </p>
@@ -1265,22 +1266,37 @@ public interface SCS {
      * @param key
      *            The key under which to store the specified file.
      * @param file
-     *            The file containing the data to be uploaded to Amazon S3.
+     *            The file containing the data to be uploaded to SCS.
      *
      * @return A {@link PutObjectResult} object containing the information
-     *         returned by Amazon S3 for the newly created object.
+     *         returned by SCS for the newly created object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#putObject(PutObjectRequest)
      * @see SCS#putObject(String, String, InputStream, ObjectMetadata)
      */
     public PutObjectResult putObject(String bucketName, String key, File file)
+            throws SCSClientException, SCSServiceException;
+    
+    /**
+     * Uploads the specified file to SCS under the specified bucket and
+     * key name.
+     * @param bucketName
+     * @param key
+     * @param file
+     * @param requestHeader
+     * 				custom request header
+     * @return
+     * @throws SCSClientException
+     * @throws SCSServiceException
+     */
+    public PutObjectResult putObject(String bucketName, String key, File file,Map<String, String> requestHeader)
             throws SCSClientException, SCSServiceException;
 
     /**
@@ -1296,30 +1312,30 @@ public interface SCS {
     
     /**
      * <p>
-     * Uploads the specified input stream and object metadata to Amazon S3 under
+     * Uploads the specified input stream and object metadata to SCS under
      * the specified bucket and key name.
      * </p>
      * <p>
-     * Amazon S3 never stores partial objects;
+     * SCS never stores partial objects;
      * if during this call an exception wasn't thrown,
      * the entire object was stored.
      * </p>
      * <p>
      * The client automatically computes
      * a checksum of the file. This checksum is verified against another checksum
-     * that is calculated once the data reaches Amazon S3, ensuring the data
+     * that is calculated once the data reaches SCS, ensuring the data
      * has not corrupted in transit over the network.
      * </p>
      * <p>
-     * Using the file extension, Amazon S3 attempts to determine
+     * Using the file extension, SCS attempts to determine
      * the correct content type and content disposition to use
      * for the object.
      * </p>
      * <p>
      * Content length <b>must</b> be specified before data can be uploaded to
-     * Amazon S3. If the caller doesn't provide it, the library will <b>have
+     * SCS. If the caller doesn't provide it, the library will <b>have
      * to</b> buffer the contents of the input stream in order to calculate it
-     * because Amazon S3 explicitly requires that the content length be sent in
+     * because SCS explicitly requires that the content length be sent in
      * the request headers before any of the data is sent.
      * </p>
      * <p>
@@ -1333,9 +1349,9 @@ public interface SCS {
      * <p>
      * If versioning is not enabled,
      * this operation will overwrite an existing object
-     * with the same key; Amazon S3 will store the last write request.
-     * Amazon S3 does not provide object locking.
-     * If Amazon S3 receives multiple write requests for the same object nearly
+     * with the same key; SCS will store the last write request.
+     * SCS does not provide object locking.
+     * If SCS receives multiple write requests for the same object nearly
      * simultaneously, all of the objects might be stored.  However, a single
      * object will be stored with the final write request.
      * </p>
@@ -1360,18 +1376,18 @@ public interface SCS {
      *            The input stream containing the data to be uploaded to Amazon
      *            S3.
      * @param metadata
-     *            Additional metadata instructing Amazon S3 how to handle the
+     *            Additional metadata instructing SCS how to handle the
      *            uploaded data (e.g. custom user metadata, hooks for specifying
      *            content type, etc.).
      *
      * @return A {@link PutObjectResult} object containing the information
-     *         returned by Amazon S3 for the newly created object.
+     *         returned by SCS for the newly created object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCS#putObject(String, String, File)
@@ -1383,13 +1399,13 @@ public interface SCS {
 
     /**
      * <p>
-     * Copies a source object to a new destination in Amazon S3.
+     * Copies a source object to a new destination in SCS.
      * </p>
      * <p>
      * By default, all object metadata for the source object are copied to
-     * the new destination object. The Amazon S3 <code>AcccessControlList</code> (ACL)
+     * the new destination object. The SCS <code>AcccessControlList</code> (ACL)
      * is <b>not</b> copied to the new
-     * object; the new object will have the default Amazon S3 ACL,
+     * object; the new object will have the default SCS ACL,
      * {@link CannedAccessControlList#Private}.
      * </p>
      * <p>
@@ -1397,7 +1413,7 @@ public interface SCS {
      * write access to the destination bucket
      * </p>
      * <p>
-     * This method only exposes the basic options for copying an Amazon S3
+     * This method only exposes the basic options for copying an SCS
      * object. Additional options are available by calling the
      * {@link SCSClient#copyObject(CopyObjectRequest)} method, including
      * conditional constraints for copying objects, setting ACLs, overwriting
@@ -1416,13 +1432,13 @@ public interface SCS {
      *            will be created.
      *
      * @return A {@link CopyObjectResult} object containing the information
-     *         returned by Amazon S3 for the newly created object.
+     *         returned by SCS for the newly created object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#copyObject(CopyObjectRequest)
@@ -1433,7 +1449,7 @@ public interface SCS {
 
     /**
      * <p>
-     * Copies a source object to a new destination in Amazon S3.
+     * Copies a source object to a new destination in SCS.
      * </p>
      * <p>
      * By default, all object metadata for the source object are copied to
@@ -1441,9 +1457,9 @@ public interface SCS {
      * specified {@link CopyObjectRequest} is provided.
      * </p>
      * <p>
-     * The Amazon S3 Acccess Control List (ACL)
+     * The SCS Acccess Control List (ACL)
      * is <b>not</b> copied to the new object. The new object will have
-     * the default Amazon S3 ACL, {@link CannedAccessControlList#Private},
+     * the default SCS ACL, {@link CannedAccessControlList#Private},
      * unless one is explicitly provided in the specified
      * {@link CopyObjectRequest}.
      * </p>
@@ -1455,13 +1471,13 @@ public interface SCS {
      * If constraints are specified in the <code>CopyObjectRequest</code>
      * (e.g.
      * {@link CopyObjectRequest#setMatchingETagConstraints(List)})
-     * and are not satisfied when Amazon S3 receives the
+     * and are not satisfied when SCS receives the
      * request, this method returns <code>null</code>.
      * This method returns a non-null result under all other
      * circumstances.
      * </p>
      * <p>
-     * This method exposes all the advanced options for copying an Amazon S3
+     * This method exposes all the advanced options for copying an SCS
      * object. For simple needs, use the
      * {@link SCSClient#copyObject(String, String, String, String)}
      * method.
@@ -1469,18 +1485,18 @@ public interface SCS {
      *
      * @param copyObjectRequest
      *            The request object containing all the options for copying an
-     *            Amazon S3 object.
+     *            SCS object.
      *
      * @return A {@link CopyObjectResult} object containing the information
-     *         returned by Amazon S3 about the newly created object, or <code>null</code> if
-     *         constraints were specified that weren't met when Amazon S3 attempted
+     *         returned by SCS about the newly created object, or <code>null</code> if
+     *         constraints were specified that weren't met when SCS attempted
      *         to copy the object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#copyObject(String, String, String, String)
@@ -1498,7 +1514,7 @@ public interface SCS {
 //     * If constraints are specified in the <code>CopyPartRequest</code>
 //     * (e.g.
 //     * {@link CopyPartRequest#setMatchingETagConstraints(List)})
-//     * and are not satisfied when Amazon S3 receives the
+//     * and are not satisfied when SCS receives the
 //     * request, this method returns <code>null</code>.
 //     * This method returns a non-null result under all other
 //     * circumstances.
@@ -1506,18 +1522,18 @@ public interface SCS {
 //     *
 //     * @param copyPartRequest
 //     *            The request object containing all the options for copying an
-//     *            Amazon S3 object.
+//     *            SCS object.
 //     *
 //     * @return A {@link CopyPartResult} object containing the information
-//     *         returned by Amazon S3 about the newly created object, or <code>null</code> if
-//     *         constraints were specified that weren't met when Amazon S3 attempted
+//     *         returned by SCS about the newly created object, or <code>null</code> if
+//     *         constraints were specified that weren't met when SCS attempted
 //     *         to copy the object.
 //     *
 //     * @throws SCSClientException
 //     *             If any errors are encountered in the client while making the
 //     *             request or handling the response.
 //     * @throws SCSServiceException
-//     *             If any errors occurred in Amazon S3 while processing the
+//     *             If any errors occurred in SCS while processing the
 //     *             request.
 //     *
 //     * @see AmazonS3Client#copyObject(CopyObjectRequest)
@@ -1533,12 +1549,12 @@ public interface SCS {
      * </p>
      * <p>
      * If attempting to delete an object that does not exist,
-     * Amazon S3 returns
+     * SCS returns
      * a success message instead of an error message.
      * </p>
      *
      * @param bucketName
-     *            The name of the Amazon S3 bucket containing the object to
+     *            The name of the SCS bucket containing the object to
      *            delete.
      * @param key
      *            The key of the object to delete.
@@ -1547,7 +1563,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#deleteObject(DeleteObjectRequest)
@@ -1563,19 +1579,19 @@ public interface SCS {
      * </p>
      * <p>
      * If attempting to delete an object that does not exist,
-     * Amazon S3 will return
+     * SCS will return
      * a success message instead of an error message.
      * </p>
      *
      * @param deleteObjectRequest
-     *            The request object containing all options for deleting an Amazon S3
+     *            The request object containing all options for deleting an SCS
      *            object.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      *
      * @see SCSClient#deleteObject(String, String)
@@ -1585,10 +1601,10 @@ public interface SCS {
 
     /**
      * <p>
-     * Returns a pre-signed URL for accessing an Amazon S3 resource.
+     * Returns a pre-signed URL for accessing an SCS resource.
      * </p>
      * <p>
-     * Pre-signed URLs allow clients to form a URL for an Amazon S3 resource,
+     * Pre-signed URLs allow clients to form a URL for an SCS resource,
      * and then sign it with the current AWS security credentials.
      * The pre-signed URL
      * can be shared to other users, allowing access to the resource without
@@ -1597,11 +1613,11 @@ public interface SCS {
      * <p>
      * Pre-signed URLs are useful in many situations where AWS security
      * credentials aren't available from the client that needs to make the
-     * actual request to Amazon S3.
+     * actual request to SCS.
      * </p>
      * <p>
      * For example, an application may need remote users to upload files to the
-     * application owner's Amazon S3 bucket, but doesn't need to ship the
+     * application owner's SCS bucket, but doesn't need to ship the
      * AWS security credentials with the application. A pre-signed URL
      * to PUT an object into the owner's bucket can be generated from a remote
      * location with the owner's AWS security credentials, then the pre-signed
@@ -1632,10 +1648,10 @@ public interface SCS {
 
     /**
      * <p>
-     * Returns a pre-signed URL for accessing an Amazon S3 resource.
+     * Returns a pre-signed URL for accessing an SCS resource.
      * </p>
      * <p>
-     * Pre-signed URLs allow clients to form a URL for an Amazon S3 resource,
+     * Pre-signed URLs allow clients to form a URL for an SCS resource,
      * and then sign it with the current AWS security credentials.
      * The pre-signed URL
      * can be shared to other users, allowing access to the resource without
@@ -1644,11 +1660,11 @@ public interface SCS {
      * <p>
      * Pre-signed URLs are useful in many situations where AWS security
      * credentials aren't available from the client that needs to make the
-     * actual request to Amazon S3.
+     * actual request to SCS.
      * </p>
      * <p>
      * For example, an application may need remote users to upload files to the
-     * application owner's Amazon S3 bucket, but doesn't need to ship the
+     * application owner's SCS bucket, but doesn't need to ship the
      * AWS security credentials with the application. A pre-signed URL
      * to PUT an object into the owner's bucket can be generated from a remote
      * location with the owner's AWS security credentials, then the pre-signed
@@ -1682,10 +1698,10 @@ public interface SCS {
 
     /**
      * <p>
-     * Returns a pre-signed URL for accessing an Amazon S3 resource.
+     * Returns a pre-signed URL for accessing an SCS resource.
      * </p>
      * <p>
-     * Pre-signed URLs allow clients to form a URL for an Amazon S3 resource,
+     * Pre-signed URLs allow clients to form a URL for an SCS resource,
      * and then sign it with the current AWS security credentials. The
      * pre-signed URL can be shared to other users, allowing access to the
      * resource without providing an account's AWS security credentials.
@@ -1693,11 +1709,11 @@ public interface SCS {
      * <p>
      * Pre-signed URLs are useful in many situations where AWS security
      * credentials aren't available from the client that needs to make the
-     * actual request to Amazon S3.
+     * actual request to SCS.
      * </p>
      * <p>
      * For example, an application may need remote users to upload files to the
-     * application owner's Amazon S3 bucket, but doesn't need to ship the AWS
+     * application owner's SCS bucket, but doesn't need to ship the AWS
      * security credentials with the application. A pre-signed URL to PUT an
      * object into the owner's bucket can be generated from a remote location
      * with the owner's AWS security credentials, then the pre-signed URL can be
@@ -1714,12 +1730,12 @@ public interface SCS {
      * @param generatePresignedUrlRequest
      *            The request object containing all the options for generating a
      *            pre-signed URL (bucket name, key, expiration date, etc).
-     * @return A pre-signed URL that can be used to access an Amazon S3 resource
+     * @return A pre-signed URL that can be used to access an SCS resource
      *         without requiring the user of the URL to know the account's AWS
      *         security credentials.
      * @throws SCSClientException
      *             If there were any problems pre-signing the request for the
-     *             Amazon S3 resource.
+     *             SCS resource.
      * @see SCS#generatePresignedUrl(String, String, Date)
      * @see SCS#generatePresignedUrl(String, String, Date, HttpMethod)
      */
@@ -1751,13 +1767,13 @@ public interface SCS {
      *            The InitiateMultipartUploadRequest object that specifies all
      *            the parameters of this operation.
      *
-     * @return An InitiateMultipartUploadResult from Amazon S3.
+     * @return An InitiateMultipartUploadResult from SCS.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public InitiateMultipartUploadResult initiateMultipartUpload(InitiateMultipartUploadRequest request)
@@ -1768,7 +1784,7 @@ public interface SCS {
      * upload before you can upload any part.
      * <p>
      * Your UploadPart request must include an upload ID and a part number. The
-     * upload ID is the ID returned by Amazon S3 in response to your Initiate
+     * upload ID is the ID returned by SCS in response to your Initiate
      * Multipart Upload request. Part number can be any number between 1 and
      * 10,000, inclusive. A part number uniquely identifies a part and also
      * defines its position within the object being uploaded. If you upload a
@@ -1776,14 +1792,14 @@ public interface SCS {
      * previous part, the previously uploaded part is overwritten.
      * <p>
      * To ensure data is not corrupted traversing the network, specify the
-     * Content-MD5 header in the Upload Part request. Amazon S3 checks the part
-     * data against the provided MD5 value. If they do not match, Amazon S3
+     * Content-MD5 header in the Upload Part request. SCS checks the part
+     * data against the provided MD5 value. If they do not match, SCS
      * returns an error.
      * <p>
      * When you upload a part, the returned UploadPartResult contains an ETag
      * property. You should record this ETag property value and the part number.
      * After uploading all parts, you must send a CompleteMultipartUpload
-     * request. At that time Amazon S3 constructs a complete object by
+     * request. At that time SCS constructs a complete object by
      * concatenating all the parts you uploaded, in ascending order based on the
      * part numbers. The CompleteMultipartUpload request requires you to send
      * all the part numbers and the corresponding ETag values.
@@ -1792,14 +1808,14 @@ public interface SCS {
      *            The UploadPartRequest object that specifies all the parameters
      *            of this operation.
      *
-     * @return An UploadPartResult from Amazon S3 containing the part number and
+     * @return An UploadPartResult from SCS containing the part number and
      *         ETag of the new part.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public UploadPartResult uploadPart(UploadPartRequest request)
@@ -1823,13 +1839,13 @@ public interface SCS {
      *            The ListPartsRequest object that specifies all the parameters
      *            of this operation.
      *
-     * @return Returns a PartListing from Amazon S3.
+     * @return Returns a PartListing from SCS.
      *
      * @throws SCSClientException
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public PartListing listParts(ListPartsRequest request)
@@ -1852,7 +1868,7 @@ public interface SCS {
 //     *             If any errors are encountered in the client while making the
 //     *             request or handling the response.
 //     * @throws SCSServiceException
-//     *             If any errors occurred in Amazon S3 while processing the
+//     *             If any errors occurred in SCS while processing the
 //     *             request.
 //     */
 //    public void abortMultipartUpload(AbortMultipartUploadRequest request)
@@ -1864,7 +1880,7 @@ public interface SCS {
      * You first upload all parts using the
      * {@link #uploadPart(UploadPartRequest)} method. After successfully
      * uploading all individual parts of an upload, you call this operation to
-     * complete the upload. Upon receiving this request, Amazon S3 concatenates
+     * complete the upload. Upon receiving this request, SCS concatenates
      * all the parts in ascending order by part number to create a new object.
      * In the CompleteMultipartUpload request, you must provide the parts list.
      * For each part in the list, you provide the part number and the ETag
@@ -1884,7 +1900,7 @@ public interface SCS {
      *             If any errors are encountered in the client while making the
      *             request or handling the response.
      * @throws SCSServiceException
-     *             If any errors occurred in Amazon S3 while processing the
+     *             If any errors occurred in SCS while processing the
      *             request.
      */
     public ObjectMetadata completeMultipartUpload(CompleteMultipartUploadRequest request)
@@ -1910,13 +1926,13 @@ public interface SCS {
 //     *            The ListMultipartUploadsRequest object that specifies all the
 //     *            parameters of this operation.
 //     *
-//     * @return A MultipartUploadListing from Amazon S3.
+//     * @return A MultipartUploadListing from SCS.
 //     *
 //     * @throws SCSClientException
 //     *             If any errors are encountered in the client while making the
 //     *             request or handling the response.
 //     * @throws SCSServiceException
-//     *             If any errors occurred in Amazon S3 while processing the
+//     *             If any errors occurred in SCS while processing the
 //     *             request.
 //     */
 //    public MultipartUploadListing listMultipartUploads(ListMultipartUploadsRequest request)

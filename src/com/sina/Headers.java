@@ -77,6 +77,9 @@ public interface Headers {
 
     /** Header for optional server-side encryption algorithm */
     public static final String SERVER_SIDE_ENCRYPTION = "x-amz-server-side-encryption";
+    
+    /** for miaopai download file url */
+    public static final String SERVER_SIDE_KEY = "x-sina-serverside-key";
 
     /** Header for optional object expiration */
     public static final String EXPIRATION = "x-amz-expiration";

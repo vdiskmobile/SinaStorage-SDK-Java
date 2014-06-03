@@ -827,6 +827,18 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
     
     /*
      * (non-Javadoc)
+     * @see com.sina.scs.SCS#putObject(java.lang.String, java.lang.String, java.io.File, java.util.Map)
+     */
+    public PutObjectResult putObject(String bucketName, String key, File file,Map<String, String> requestHeader)
+            throws SCSClientException, SCSServiceException {
+    	ObjectMetadata objectMetadata = new ObjectMetadata();
+    	objectMetadata.setUserHeader(requestHeader);
+    	return putObject(new PutObjectRequest(bucketName, key, file)
+    	.withMetadata(objectMetadata));
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see com.sina.scs.AmazonS3#putObjectRelax(java.lang.String, java.lang.String, java.lang.String, long)
      */
     public PutObjectResult putObjectRelax(String bucketName, String key, String fileSha1, long fileLength){
@@ -1084,6 +1096,7 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
         result.setExpirationTime(returnedMetadata.getExpirationTime());
         result.setExpirationTimeRuleId(returnedMetadata.getExpirationTimeRuleId());
         result.setContentMd5(contentMd5);
+        result.setServiceSideKey(returnedMetadata.getServersideKey());
 
         return result;
     }
@@ -1737,6 +1750,18 @@ public class SCSClient extends SCSWebServiceClient implements SCS {
                 if (key != null) key = key.trim();
                 if (value != null) value = value.trim();
                 request.addHeader(Headers.S3_USER_METADATA_PREFIX + key, value);
+            }
+        }
+        
+        //处理自定义头
+        Map<String, String> userHeader = metadata.getUserHeader();
+        if (userHeader != null) {
+            for (Entry<String, String> entry : userHeader.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key != null) key = key.trim();
+                if (value != null) value = value.trim();
+                request.addHeader(key, value);
             }
         }
     }

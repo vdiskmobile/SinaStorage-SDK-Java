@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sina.Headers;
+import com.sina.http.httpclientandroidlib.entity.mime.Header;
 import com.sina.scs.ObjectExpirationResult;
 import com.sina.scs.ServerSideEncryptionResult;
 
@@ -43,6 +44,11 @@ public class ObjectMetadata implements ServerSideEncryptionResult, ObjectExpirat
      */
     private Map<String, String> userMetadata = new HashMap<String, String>();
 
+    /**
+     * Custom user headers
+     */
+    private Map<String, String> userHeader = new HashMap<String, String>();
+    
     /**
      * All other (non user custom) headers such as Content-Length, Content-Type,
      * etc.
@@ -115,6 +121,10 @@ public class ObjectMetadata implements ServerSideEncryptionResult, ObjectExpirat
     public Map<String, String> getUserMetadata() {
         return userMetadata;
     }
+    
+    public Map<String, String> getUserHeader(){
+    	return userHeader;
+    }
 
     /**
      * <p>
@@ -148,6 +158,10 @@ public class ObjectMetadata implements ServerSideEncryptionResult, ObjectExpirat
      */
     public void setUserMetadata(Map<String, String> userMetadata) {
         this.userMetadata = userMetadata;
+    }
+    
+    public void setUserHeader(Map<String, String> userHeader) {
+    	this.userHeader = userHeader;
     }
 
     /**
@@ -196,6 +210,10 @@ public class ObjectMetadata implements ServerSideEncryptionResult, ObjectExpirat
      */
     public void addUserMetadata(String key, String value) {
         this.userMetadata.put(key, value);
+    }
+    
+    public void addUserHeader(String key, String value) {
+    	this.userHeader.put(key, value);
     }
 
     /**
@@ -606,6 +624,10 @@ public class ObjectMetadata implements ServerSideEncryptionResult, ObjectExpirat
      */
     public void setServerSideEncryption(String serverSideEncryption) {
         metadata.put(Headers.SERVER_SIDE_ENCRYPTION, serverSideEncryption);
+    }
+    
+    public String getServersideKey() {
+    	return (String)metadata.get(Headers.SERVER_SIDE_KEY);
     }
 
     /**
