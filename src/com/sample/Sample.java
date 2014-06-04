@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.sina.SCSClientException;
 import com.sina.SCSServiceException;
+import com.sina.SDKGlobalConfiguration;
 import com.sina.auth.AWSCredentials;
 import com.sina.auth.BasicAWSCredentials;
 import com.sina.event.ProgressEvent;
@@ -64,7 +65,7 @@ public class Sample {
 	 * 创建bucket
 	 */
 	public void createBucket(){
-		Bucket bucket = conn.createBucket("create-a-bucket11");
+		Bucket bucket = conn.createBucket("www.test.com");
 		
 		System.out.println(bucket);
 	}
@@ -73,14 +74,14 @@ public class Sample {
 	 * 删除bucket
 	 */
 	public void deleteBucket(){
-		conn.deleteBucket("create-a-bucket1212121");
+		conn.deleteBucket("create-a-bucket");
 	}
 	
 	/**
 	 * 获取bucket ACL
 	 */
 	public void getBucketAcl(){
-		AccessControlList acl = conn.getBucketAcl("create-a-bucket11");
+		AccessControlList acl = conn.getBucketAcl("bucket-name");
 		System.out.println(acl);
 	}
 	
@@ -91,16 +92,16 @@ public class Sample {
 		AccessControlList acl = new AccessControlList();
 		acl.grantPermissions(UserIdGrantee.CANONICAL, Permission.Read,Permission.ReadAcp);
 		acl.grantPermissions(UserIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
-		acl.grantPermissions(new UserIdGrantee("SINA0000001001NHT3M7"), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
+		acl.grantPermissions(new UserIdGrantee("SINA0000001001Nxxxxx"), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 		
-		conn.setBucketAcl("create-a-bucket11", acl);
+		conn.setBucketAcl("bucket-name", acl);
 	}
 	
 	/**
 	 * 列bucket中所有文件
 	 */
 	public void listObjects(){
-		ObjectListing objectListing = conn.listObjects("test11");
+		ObjectListing objectListing = conn.listObjects("bucket-name");
 		System.out.println(objectListing);
 	}
 	
@@ -109,7 +110,7 @@ public class Sample {
 	 * 获取object metadata
 	 */
 	public void getObjectMetadata(){
-		ObjectMetadata metadata = conn.getObjectMetadata("test11", "/aaa/bbb.txt");
+		ObjectMetadata metadata = conn.getObjectMetadata("bucket-name", "object-key");
 		System.out.println(metadata.getUserMetadata());
 		System.out.println(metadata.getETag());
 		System.out.println(metadata.getLastModified());
@@ -129,12 +130,13 @@ public class Sample {
 	 *	//		objectData.close();
 	 */
 	public void getObject(){
-		S3Object s3Obj = conn.getObject("test11", "/aaa/bbb.txt");
+		SDKGlobalConfiguration.setGlobalTimeOffset(-60*5);//超时时间5分钟以后
+		S3Object s3Obj = conn.getObject("bucket-name", "object-key");
 		InputStream in = s3Obj.getObjectContent();
 		byte[] buf = new byte[1024];
 		OutputStream out = null;
 		try {
-			out = new FileOutputStream(new File("dage1.txt"));
+			out = new FileOutputStream(new File("local-file-path.txt"));
 			int count;
 			while( (count = in.read(buf)) != -1)
 			{
@@ -151,6 +153,7 @@ public class Sample {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}finally{
+			SDKGlobalConfiguration.setGlobalTimeOffset(0);
 			try {
 				out.close();
 			} catch (IOException e) {
@@ -168,17 +171,17 @@ public class Sample {
 	 * 上传文件
 	 */
 	public void putObject(){
-		PutObjectResult putObjectResult = conn.putObject("asdasdasdasd", "asdf第三方地方阿333==斯蒂---芬这种111.pdf", new File("dage1.txt"));
+		PutObjectResult putObjectResult = conn.putObject("bucket-name", "object-key", new File("local-file-path.txt"));
 		System.out.println(putObjectResult);
 	}
 	
 	/**
-	 * 上传文件 for 秒拍
+	 * 上传文件 自定义请求头
 	 */
-	public void putObjectForMiaopai(){
+	public void putObjectWithCustomRequestHeader(){
 		Map<String, String> requestHeader = new HashMap<String, String>();
 		requestHeader.put("x-sina-additional-indexed-key", "stream/test111.txt");
-		PutObjectResult putObjectResult = conn.putObject("sandbox2", "ssk/a/", new File("dage1.txt"),requestHeader);
+		PutObjectResult putObjectResult = conn.putObject("sandbox2", "ssk/a/", new File("local-file-path"),requestHeader);
 		System.out.println(putObjectResult);
 	}
 	
@@ -186,21 +189,21 @@ public class Sample {
 	 * 拷贝object
 	 */
 	public void copyObject(){
-		conn.copyObject("asdasdasdasd", "awsdas阿斯顿.txt", "asdasdasdasd", "aa按时发生地方2111.txt");
+		conn.copyObject("source-bucket-name", "source-object-key", "dest-bucket-name", "dest-object-key");
 	}
 	
 	/**
 	 * 秒传
 	 */
 	public void putObjectRelax(){
-		conn.putObjectRelax("asdasdasdasd","magnet.txt","4322fec3dd44787585f818a2d7bfa85ae0b664ab",12526362624l);
+		conn.putObjectRelax("bucket-name","object-key","4322fec3dd44787585f818a2d7bfa85ae0b664ab",12526362624l);
 	}
 	
 	/**
 	 * 获取object metadata
 	 */
 	public void getObjectMeta(){
-		ObjectMetadata objectMetadata = conn.getObjectMetadata("asdasdasdasd", "aaa111a.txt");
+		ObjectMetadata objectMetadata = conn.getObjectMetadata("bucket-name", "object-key");
 		System.out.println(objectMetadata.getUserMetadata());
 		System.out.println(objectMetadata.getContentLength());
 		System.out.println(objectMetadata.getRawMetadata());
@@ -219,21 +222,21 @@ public class Sample {
 					put("ccc","3333");
 					put("asdfdsaf","vvvvvv");
 		}});
-		conn.setObjectMetadata("asdasdasdasd", "aaa111a.txt", objectMetadata);
+		conn.setObjectMetadata("bucket-name", "object-key", objectMetadata);
 	}
 	
 	/**
 	 * 删除Object
 	 */
 	public void deleteObject(){
-		conn.deleteObject("asdasdasdasd", "aaa撒旦法第三方a.txt");
+		conn.deleteObject("bucket-name", "object-key");
 	}
 	
 	/**
 	 * 获取object acl
 	 */
 	public void getObjectAcl(){
-		AccessControlList acl = conn.getObjectAcl("asdasdasdasd", "awsdas阿斯顿.txt");
+		AccessControlList acl = conn.getObjectAcl("bucket-name", "object-key");
 		System.out.println(acl);
 	}
 	
@@ -246,7 +249,7 @@ public class Sample {
 		acl.grantPermissions(UserIdGrantee.ANONYMOUSE,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 		acl.grantPermissions(new UserIdGrantee("SINA000000"+accessKey), Permission.Read,Permission.ReadAcp,Permission.Write,Permission.WriteAcp);
 		
-		conn.setObjectAcl("asdasdasdasd", "awsdas阿斯顿.txt", acl);
+		conn.setObjectAcl("bucket-name", "object-key", acl);
 	}
 	
 	/* 分片上传文件 */
@@ -254,7 +257,7 @@ public class Sample {
 	/* TransferManager */
 	public void putObjectByTransferManager(){
 		TransferManager tf = new TransferManager(conn);
-		Upload myUpload = tf.upload("asdasdasdasd", "从市场上菜市场市场上菜市场上厕所方阿333==斯蒂---芬这种111.pdf", new File("/Users/hanchao/Desktop/归档.zip"));
+		Upload myUpload = tf.upload("bucket-name", "object-key", new File("local-file-path"));
 		
 		// You can poll your transfer's status to check its progress
 		if (myUpload.isDone() == false) {
@@ -264,9 +267,6 @@ public class Sample {
 					+ myUpload.getProgress().getBytesTransferred());
 		}
 
-		// Transfers also allow you to set a <code>ProgressListener</code> to
-		// receive
-		// asynchronous notifications about your transfer's progress.
 		myUpload.addProgressListener(new ProgressListener(){
 			@Override
 			public void progressChanged(ProgressEvent progressEvent) {
@@ -274,9 +274,6 @@ public class Sample {
 			}
 		});
 
-		// Or you can block the current thread and wait for your transfer to
-		// to complete. If the transfer fails, this method will throw an
-		// SCSClientException or SCSServiceException detailing the reason.
 		try {
 			myUpload.waitForCompletion();
 		} catch (SCSServiceException e) {
@@ -295,13 +292,13 @@ public class Sample {
 	 */
 	public void multipartsUpload() throws Exception{
 		//初始化上传任务
-		InitiateMultipartUploadResult initiateMultipartUploadResult = conn.initiateMultipartUpload("asdasdasdasd", "ababtest11111.txt");
+		InitiateMultipartUploadResult initiateMultipartUploadResult = conn.initiateMultipartUpload("bucket-name", "object-key");
 		
 		if(initiateMultipartUploadResult!=null){
 			//分片上传
 			List<PartETag> partETags = null;
 			PutObjectRequest putObjectRequest = new PutObjectRequest(initiateMultipartUploadResult.getBucketName(),
-					initiateMultipartUploadResult.getKey(), new File("/Users/hanchao/Desktop/归档.zip"));
+					initiateMultipartUploadResult.getKey(), new File("local-file-path"));
 			 try {
 				long optimalPartSize = 5 * 1024 * 1024; //5M
 	            UploadPartRequestFactory requestFactory = new UploadPartRequestFactory(putObjectRequest, initiateMultipartUploadResult.getUploadId()
@@ -371,7 +368,7 @@ public class Sample {
         epochMillis += 60*5*1000;
         expiration = new Date(epochMillis);   
         
-		URL presignedUrl = conn.generatePresignedUrl("asdasdasdasd", "awsdas阿斯顿.txt", expiration);
+		URL presignedUrl = conn.generatePresignedUrl("bucket-name", "object-key", expiration);
 		System.out.println(presignedUrl);
 	}
 	
@@ -386,12 +383,12 @@ public class Sample {
 //		sample.deleteBucket();
 //		sample.getBucketAcl();
 //		sample.putBucketAcl();
-//		sample.listObjects();
+		sample.listObjects();
 		/* Object操作 */
 //		sample.getObjectMetadata();
 //		sample.getObject();
 //		sample.putObject();
-		sample.putObjectForMiaopai();
+//		sample.putObjectWithCustomRequestHeader();
 //		sample.copyObject();
 //		sample.putObjectRelax();
 //		sample.getObjectMeta();

@@ -136,6 +136,7 @@
 		 *	objectData.close();
 		 */
 		public void getObject(){
+			//SDKGlobalConfiguration.setGlobalTimeOffset(-60*5);//自定义全局超时时间5分钟以后(可选项)
 			S3Object s3Obj = conn.getObject("test11", "/test/file.txt");
 			InputStream in = s3Obj.getObjectContent();
 			byte[] buf = new byte[1024];
@@ -158,6 +159,7 @@
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}finally{
+				//SDKGlobalConfiguration.setGlobalTimeOffset(0);//还原超时时间
 				try {
 					out.close();
 				} catch (IOException e) {
@@ -179,11 +181,24 @@
 		 */
 		public void putObject(){
 			PutObjectResult putObjectResult = conn.putObject("bucket名称",
-												"文件上传路径", 
-												new File("本地文件"));
+												"文件上传路径", new File("本地文件"));
 			System.out.println(putObjectResult);
 		}
 		
+* 上传文件(自定义请求头):
+		
+		/**
+		 * 上传文件 自定义请求头
+		 */
+		public void putObjectWithCustomRequestHeader(){
+			//自定义请求头k-v
+			Map<String, String> requestHeader = new HashMap<String, String>();
+			requestHeader.put("x-sina-additional-indexed-key", "stream/test111.txt");
+			PutObjectResult putObjectResult = conn.putObject("bucket名称", "ssk/a/", 
+												              new File("本地文件"), requestHeader);
+			System.out.println(putObjectResult);//服务器响应结果
+		}
+
 		
 * 秒传文件:
 		
